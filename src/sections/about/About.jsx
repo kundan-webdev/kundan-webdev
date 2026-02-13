@@ -5,7 +5,7 @@ import Heading from "../../components/ui/Heading";
 const About = () => {
   return (
     <section className="container-content ">
-      <Heading title="About" />
+      <Heading title="" />
       <div className="flex justify-between">
         <p className="text-white text-[36px] max-w-[713px]">
           Skilled in HTML, CSS, SCSS, JavaScript, React, Tailwind, and GSAP,
