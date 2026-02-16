@@ -53,13 +53,3 @@
 - Build production-level full stack projects  
 - Strengthen DSA & problem solving  
 
----
-
-## 🤝 Connect With Me
-
-- 🌐 Portfolio: https://kundan.webdev.vercel.app  
-- 🐙 GitHub: https://github.com/kundan-webdev  
-
----
-
-> “Consistency beats intensity.”
