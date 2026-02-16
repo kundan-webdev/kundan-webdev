@@ -10,7 +10,7 @@
 ## 🌐 Portfolio
 
 🔗 **Live Portfolio:**  
-👉 https://kundan.webdev.vercel.app  
+👉 https://kundan-webdev.vercel.app/  
 
 ---
 
