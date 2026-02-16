@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap');
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
 
 @theme {
   --color-primary: #6366f1;
@@ -24,18 +22,16 @@
     max-width: var(--max-width-content);
     margin-inline: auto;
     width: 100%;
-    padding-inline: 1rem;
   }
 
   .container-wide {
     max-width: var(--max-width-divider);
     margin-inline: auto;
     width: 100%;
-    padding-inline: 1rem;
   }
 }
 
-/* GitHub Calendar Styles */
+/* GitHub Calendar Customization */
 .calendar-wrapper .calendar {
   background: #111111;
   padding: 20px;
@@ -47,4 +43,72 @@
 .calendar-wrapper .calendar text {
   fill: #888 !important;
   font-size: 10px;
-  font-family: va
+  font-family: var(--font-display);
+}
+
+.calendar-wrapper .calendar .day {
+  rx: 3;
+  ry: 3;
+}
+
+.calendar-wrapper .calendar .contrib-column {
+  transition: opacity 0.2s ease;
+}
+
+.calendar-wrapper .calendar .contrib-column:hover {
+  opacity: 0.8;
+}
+
+/* Contribution levels */
+.calendar-wrapper .calendar .q0 { fill: #1a1a1a; }
+.calendar-wrapper .calendar .q1 { fill: #2a1e15; }
+.calendar-wrapper .calendar .q2 { fill: #5c2e10; }
+.calendar-wrapper .calendar .q3 { fill: #a23b00; }
+.calendar-wrapper .calendar .q4 { fill: #ff6a00; }
+
+/* Tooltip styling */
+.calendar-wrapper .calendar .tooltip {
+  background: #1f1f1f !important;
+  color: #fff !important;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: var(--font-display);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Month labels */
+.calendar-wrapper .calendar .month {
+  fill: #888;
+  font-size: 11px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .calendar-wrapper .calendar {
+    padding: 12px;
+  }
+  
+  .calendar-wrapper .calendar text {
+    font-size: 9px;
+  }
+}
+
+/* Scrollbar styling for calendar */
+.calendar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.calendar::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.calendar::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+.calendar::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
