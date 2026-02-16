@@ -13,7 +13,7 @@ const HeroContent = () => {
         Kundan Kumar!
       </h1>
       <p className="text-[4rem] font-medium  flex items-center leading-[110%]  gap-4">
-        I’m a <span className="text-orange-600">Frontend Developer</span> with
+        I’m a <span className="bg-clip-text text-transparent bg-[linear-gradient(-145deg,#FF923C_0%,#E66123_36%,#FB3800_100%)]">Frontend Developer</span> with
       </p>
 
       <p className="text-[4rem] font-medium leading-[110%] flex items-baseline  gap-4">

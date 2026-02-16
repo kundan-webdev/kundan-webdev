@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap');
-@import "tailwindcss";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @theme {
   --color-primary: #6366f1;
@@ -22,11 +24,27 @@
     max-width: var(--max-width-content);
     margin-inline: auto;
     width: 100%;
+    padding-inline: 1rem;
   }
 
   .container-wide {
     max-width: var(--max-width-divider);
     margin-inline: auto;
     width: 100%;
+    padding-inline: 1rem;
   }
 }
+
+/* GitHub Calendar Styles */
+.calendar-wrapper .calendar {
+  background: #111111;
+  padding: 20px;
+  border-radius: 16px;
+  font-family: var(--font-display);
+  min-height: 150px;
+}
+
+.calendar-wrapper .calendar text {
+  fill: #888 !important;
+  font-size: 10px;
+  font-family: va

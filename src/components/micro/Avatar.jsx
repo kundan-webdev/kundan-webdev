@@ -1,9 +1,9 @@
-import DP from "../../assets/DP.png"
+import DP from "../../assets/DPv2.png"
 const Avatar = ({
   src = DP,
   height = 96, // capsule height
   width = 160, // capsule width (greater than height)
-  bgColor = "bg-red-600",
+  bgColor = "bg-[linear-gradient(-145deg,#FFFF33_0%,#DF3405_37%,#8D2609_74%,#4C1300_100%)]",
   alt = "Profile avatar",
 }) => {
   return (
