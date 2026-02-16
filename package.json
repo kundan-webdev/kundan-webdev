@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
-    "github-calendar": "^2.3.4",
+    "date-fns": "^4.1.0",
     "react": "^19.2.0",
+    "react-activity-calendar": "^3.1.1",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.1.18"
   },

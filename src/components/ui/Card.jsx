@@ -3,7 +3,7 @@ const Card = ({
   title,
   subtitle,
   width = 350,
-  height = 250,
+  height = 275,
   className = "",
 }) => {
   return (

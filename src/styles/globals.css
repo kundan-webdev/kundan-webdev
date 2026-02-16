@@ -14,6 +14,7 @@
   body {
     font-family: var(--font-display);
     color: white;
+    background: #000;
   }
 }
 
@@ -22,93 +23,155 @@
     max-width: var(--max-width-content);
     margin-inline: auto;
     width: 100%;
+    padding-inline: 1rem;
   }
 
   .container-wide {
     max-width: var(--max-width-divider);
     margin-inline: auto;
     width: 100%;
+    padding-inline: 1rem;
   }
 }
 
-/* GitHub Calendar Customization */
-.calendar-wrapper .calendar {
-  background: #111111;
-  padding: 20px;
-  border-radius: 16px;
-  font-family: var(--font-display);
-  min-height: 150px;
+/* ==================== React Activity Calendar Custom Styling ==================== */
+
+.activity-calendar-wrapper .react-activity-calendar {
+  font-family: var(--font-display) !important;
 }
 
-.calendar-wrapper .calendar text {
+/* Calendar container */
+.activity-calendar-wrapper .react-activity-calendar__scroll-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+}
+
+/* All text elements */
+.activity-calendar-wrapper .react-activity-calendar text {
   fill: #888 !important;
-  font-size: 10px;
-  font-family: var(--font-display);
-}
-
-.calendar-wrapper .calendar .day {
-  rx: 3;
-  ry: 3;
-}
-
-.calendar-wrapper .calendar .contrib-column {
-  transition: opacity 0.2s ease;
-}
-
-.calendar-wrapper .calendar .contrib-column:hover {
-  opacity: 0.8;
-}
-
-/* Contribution levels */
-.calendar-wrapper .calendar .q0 { fill: #1a1a1a; }
-.calendar-wrapper .calendar .q1 { fill: #2a1e15; }
-.calendar-wrapper .calendar .q2 { fill: #5c2e10; }
-.calendar-wrapper .calendar .q3 { fill: #a23b00; }
-.calendar-wrapper .calendar .q4 { fill: #ff6a00; }
-
-/* Tooltip styling */
-.calendar-wrapper .calendar .tooltip {
-  background: #1f1f1f !important;
-  color: #fff !important;
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 12px;
-  font-family: var(--font-display);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  font-size: 11px !important;
+  font-family: var(--font-display) !important;
+  font-weight: 500 !important;
 }
 
 /* Month labels */
-.calendar-wrapper .calendar .month {
-  fill: #888;
-  font-size: 11px;
+.activity-calendar-wrapper .react-activity-calendar .react-activity-calendar__legend-month text {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  fill: #888 !important;
+}
+
+/* Weekday labels */
+.activity-calendar-wrapper .react-activity-calendar .react-activity-calendar__legend-weekday text {
+  font-size: 11px !important;
+  fill: #888 !important;
+}
+
+/* Activity blocks - force styling with rounded corners */
+.activity-calendar-wrapper .react-activity-calendar rect {
+  rx: 4 !important;
+  ry: 4 !important;
+  stroke: transparent !important;
+  stroke-width: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.activity-calendar-wrapper .react-activity-calendar rect:hover {
+  opacity: 0.85 !important;
+  transform: scale(1.05);
+}
+
+/* Footer section */
+.activity-calendar-wrapper .react-activity-calendar__footer {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: #888;
+}
+
+/* Total count text */
+.activity-calendar-wrapper .react-activity-calendar__count {
+  color: #888 !important;
+  font-weight: 500;
+}
+
+/* Legend container */
+.activity-calendar-wrapper .react-activity-calendar__legend-colors {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #888;
+}
+
+.activity-calendar-wrapper .react-activity-calendar__legend-colors span {
+  font-weight: 500;
+}
+
+/* Tooltip styling - matching your design */
+.activity-calendar-wrapper .react-activity-calendar__tooltip {
+  background: #1f1f1f !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+  font-family: var(--font-display) !important;
+  font-weight: 500 !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Tooltip arrow */
+.activity-calendar-wrapper .react-activity-calendar__tooltip-arrow {
+  fill: #1f1f1f !important;
+}
+
+/* Custom scrollbar for calendar */
+.activity-calendar-wrapper .react-activity-calendar__scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.activity-calendar-wrapper .react-activity-calendar__scroll-container::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 8px;
+}
+
+.activity-calendar-wrapper .react-activity-calendar__scroll-container::-webkit-scrollbar-thumb {
+  background: #5c2e10;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.activity-calendar-wrapper .react-activity-calendar__scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #a23b00;
+}
+
+/* Firefox scrollbar */
+.activity-calendar-wrapper .react-activity-calendar__scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: #5c2e10 #1a1a1a;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .calendar-wrapper .calendar {
-    padding: 12px;
+  .activity-calendar-wrapper .react-activity-calendar text {
+    font-size: 10px !important;
   }
-  
-  .calendar-wrapper .calendar text {
-    font-size: 9px;
+
+  .activity-calendar-wrapper .react-activity-calendar rect {
+    rx: 3 !important;
+    ry: 3 !important;
   }
 }
 
-/* Scrollbar styling for calendar */
-.calendar::-webkit-scrollbar {
-  height: 8px;
-}
-
-.calendar::-webkit-scrollbar-track {
-  background: #1a1a1a;
-  border-radius: 4px;
-}
-
-.calendar::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-}
-
-.calendar::-webkit-scrollbar-thumb:hover {
-  background: #444;
+@media (max-width: 640px) {
+  .activity-calendar-wrapper .react-activity-calendar__footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
