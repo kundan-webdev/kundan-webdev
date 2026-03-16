@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hey, I'm Kundan Kumar 👋
 
-## Getting Started
+**Full-Stack Developer · DevXClub Founder · UI/UX Designer**  
+Building real products from Varanasi, India. Final-year BCA student.
 
-First, run the development server:
+[![Portfolio](https://img.shields.io/badge/Portfolio-kundan--webdev.vercel.app-ea580c?style=flat-square)](https://kundan-webdev.vercel.app)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077b5?style=flat-square&logo=linkedin)](https://linkedin.com/in/kundan-webdev)
+[![Email](https://img.shields.io/badge/Email-kundan.webdev%40gmail.com-ea580c?style=flat-square&logo=gmail&logoColor=white)](mailto:kundan.webdev@gmail.com)
+[![Instagram](https://img.shields.io/badge/@kundan__webdev-e1306c?style=flat-square&logo=instagram&logoColor=white)](https://instagram.com/kundan_webdev)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🏗️ Currently Building
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**[DevXClub v2](https://devxclub.com)** — A full-stack developer community platform. Turborepo monorepo · Next.js 15 · Express.js · MongoDB · Cloudinary. JWT auth, resource uploads, dashboard, and a studio arm at [studio.devxclub.com](https://studio.devxclub.com).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**[Solvimate](https://solvimate.com)** — Frontend Developer Intern. Leading React development, integrating Express.js REST APIs.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Frontend** — Next.js 15 · React · TypeScript · Tailwind CSS · Framer Motion · GSAP  
+**Backend** — Node.js · Express.js · MongoDB · JWT · Cloudinary · Zod  
+**Design & Tools** — Figma · Postman · Turborepo · Git · Vercel · Render
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📂 Projects
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Project | Stack | Links |
+|---|---|---|
+| DevXClub v2 | Next.js 15, Express, MongoDB, Turborepo | [Live](https://devxclub.com) |
+| DevXClub REST API | Express.js, MongoDB, JWT, Zod | [Docs](#) |
+| Job Board API | Express.js, Role-Based Auth, Pagination | [Docs](#) |
+| UI/UX Design Work | Figma, Prototyping | [View](#) |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📊 Stats
+
+![Stats](https://github-readme-stats.vercel.app/api?username=kundan-webdev&show_icons=true&theme=dark&hide_border=true&bg_color=080808&title_color=ea580c&icon_color=ea580c&hide=stars)
+![Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=kundan-webdev&layout=compact&theme=dark&hide_border=true&bg_color=080808&title_color=ea580c)
+
+---
+
+> 🟢 Open to full-stack internships · frontend roles · freelance UI/UX  
+> 📸 Documenting the journey → [@kundan_webdev](https://instagram.com/kundan_webdev)
