@@ -172,10 +172,10 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
-          <span className="text-orange-500 text-sm font-bold tracking-widest uppercase mb-3 block">
-            CONTACT
+          <span className="text-sm text-white/40 font-medium mb-4 block">
+            <span className="text-orange-500 font-bold">.</span>contact
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0] mb-4">
             Let's Work Together
           </h2>
           <p className="text-[#777] text-base max-w-lg">

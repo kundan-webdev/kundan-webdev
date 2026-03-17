@@ -73,7 +73,7 @@ export const projects = [
     badge: "Frontend",
     badge_color: "green",
     description: "Add your one-line description here — what the brief was, what you built specifically.",
-    image: "/dist/projects/004.png",
+    image: "/projects/004.png",
     tags: ["React", "Tailwind CSS", "Framer Motion"],
     links: { live: "#", github: "#" }
   }

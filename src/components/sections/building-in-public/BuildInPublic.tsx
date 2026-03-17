@@ -18,8 +18,12 @@ const BuildInPublic = () => {
         transition={{ duration: 0.6 }}
         className="mb-12"
       >
-        <span className="text-orange-500 text-sm font-bold tracking-widest uppercase mb-3 block">BUILDING IN PUBLIC</span>
-        <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Building in Public</h2>
+        <span className="text-sm text-white/40 font-medium mb-4 block">
+          <span className="text-orange-500 font-bold">.</span>building in public
+        </span>
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0] mb-4">
+          Building in Public
+        </h2>
         <p className="text-[#777] max-w-2xl text-lg">
           I document my dev journey every week — projects, learnings, failures, and wins. No filters, just real progress. Follow along on Instagram @kundan_webdev
         </p>

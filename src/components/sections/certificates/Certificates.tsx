@@ -1,8 +1,5 @@
-// src/sections/certificates/Certificates.jsx
-
 "use client";
 import { useState } from "react";
-import Heading from "@/components/ui/Heading";
 import { certificates } from "@/data/certificates";
 import { motion } from "framer-motion";
 
@@ -18,10 +15,14 @@ const Certificates = () => {
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.6 }}
       >
-        <span className="text-orange-500 text-sm font-bold tracking-widest uppercase mb-3 block">CERTIFICATES</span>
-        <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Certifications</h2>
+        <span className="text-sm text-white/40 font-medium mb-4 block">
+          <span className="text-orange-500 font-bold">.</span>certificates
+        </span>
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0]">
+          Certifications
+        </h2>
 
-        <p className="text-[#777] mt-2 mb-12 max-w-xl text-lg">
+        <p className="text-[#777] mt-4 mb-12 max-w-xl text-lg">
           Professional certifications that validate my expertise.
         </p>
       </motion.div>

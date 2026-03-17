@@ -9,7 +9,10 @@ import { GlobalGrid } from "@/components/common/GlobalGrid";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://kundan-webdev.vercel.app"),
-  title: "Kundan Kumar — Full-Stack Developer & DevXClub Founder",
+  title: {
+    default: "Kundan Kumar — Full-Stack Developer & DevXClub Founder",
+    template: "%s | Kundan Kumar",
+  },
   description:
     "Final-year BCA student from Varanasi. Frontend Developer, MERN Stack, UI/UX Designer. Founder of DevXClub. Open to internships and junior roles.",
   keywords: [
@@ -18,6 +21,7 @@ export const metadata: Metadata = {
     "UI/UX Designer", "Full Stack Developer",
   ],
   authors: [{ name: "Kundan Kumar", url: "https://kundan-webdev.vercel.app" }],
+  creator: "Kundan Kumar",
   openGraph: {
     title: "Kundan Kumar — Full-Stack Developer & DevXClub Founder",
     description: "Building real products. Founder of DevXClub.",
@@ -34,15 +38,33 @@ export const metadata: Metadata = {
     creator: "@kundan_webdev",
     images: ["/assets/DPv2.png"],
   },
-  robots: { index: true, follow: true },
+  icons: {
+    icon: [
+      { url: "/assets/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/assets/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/assets/favicon.ico" },
+    ],
+    apple: "/assets/apple-touch-icon.png",
+    other: [
+      { rel: "manifest", url: "/assets/site.webmanifest" },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    // Always dark — no theme toggle
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -51,7 +73,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans antialiased bg-[#080808] text-white selection:bg-orange-500/20">
+      <body
+        className="font-sans antialiased bg-[#080808] text-white selection:bg-orange-500/20"
+        suppressHydrationWarning
+      >
         <SmoothScrolling>
           <ScrollProgress />
           <LoadingScreen />

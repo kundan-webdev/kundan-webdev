@@ -13,8 +13,10 @@ const Testimonials = () => {
         transition={{ duration: 0.6 }}
         className="mb-12"
       >
-        <span className="text-orange-500 text-sm font-bold tracking-widest uppercase mb-3 block">TESTIMONIALS</span>
-        <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">What People Say</h2>
+        <span className="text-sm text-white/40 font-medium mb-4 block">
+          <span className="text-orange-500 font-bold">.</span>testimonials
+        </span>
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0] mb-4">What People Say</h2>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

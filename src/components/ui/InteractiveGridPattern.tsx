@@ -40,7 +40,7 @@ export function InteractiveGridPattern({
             y={y}
             width={width}
             height={height}
-            className={cn("stroke-white/[0.04]", squaresClassName)}
+            className={cn("stroke-white/[0.06]", squaresClassName)}
             style={{
               // "transparent" kills pointer events on SVG — use rgba(0,0,0,0) instead
               fill: isHovered

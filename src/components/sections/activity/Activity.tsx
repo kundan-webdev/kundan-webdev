@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ActivityCalendar } from "react-activity-calendar";
-import Heading from "@/components/ui/Heading";
 import { motion } from "framer-motion";
 import { GitCommitHorizontal, BookMarked, GitPullRequest, Star } from "lucide-react";
 
@@ -117,10 +116,12 @@ const Activity = () => {
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
-        <span className="text-orange-500 text-sm font-bold tracking-widest uppercase mb-3 block">
-          ACTIVITY
+        <span className="text-sm text-white/40 font-medium mb-4 block">
+          <span className="text-orange-500 font-bold">.</span>activity
         </span>
-        <Heading title="Consistent Contribution" />
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0]">
+          Consistent Contribution
+        </h2>
         <p className="text-white/60 mt-4 mb-10 max-w-xl text-lg leading-relaxed">
           Consistent contribution and continuous improvement through real-world
           projects and open-source work.

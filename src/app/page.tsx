@@ -13,8 +13,9 @@ import Footer from "@/components/common/Footer";
 
 export default function Home() {
   return (
-    // pt-16 — Nitro navbar is thinner than the pill navbar
-    <div className="min-h-screen flex flex-col pt-16 overflow-x-hidden bg-[#080808]">
+    // overflow-x-hidden REMOVED — it kills position:sticky on child elements
+    // overflow-x is handled per-section instead
+    <div className="min-h-screen flex flex-col pt-16 bg-[#080808]">
       <main className="flex-1">
         <Hero />
         <About />

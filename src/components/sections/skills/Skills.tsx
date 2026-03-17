@@ -1,5 +1,4 @@
 "use client";
-import Heading from "@/components/ui/Heading";
 import { motion } from "framer-motion";
 
 const skillsData = [
@@ -29,8 +28,12 @@ const Skills = () => {
   return (
     <section className="container-content py-20 md:py-28" id="skills">
       <div className="mb-10">
-        <span className="text-orange-500 text-sm font-bold tracking-widest uppercase mb-2 block">SKILLS</span>
-        <Heading title="My Toolkit" />
+        <span className="text-sm text-white/40 font-medium mb-4 block">
+          <span className="text-orange-500 font-bold">.</span>skills
+        </span>
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0]">
+          My Toolkit
+        </h2>
         <p className="text-[#777] max-w-2xl text-lg mt-4">
           Things I build with daily, things I&apos;m growing in, and tools I use to design and ship.
         </p>
