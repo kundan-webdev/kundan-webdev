@@ -108,7 +108,7 @@ const Activity = () => {
   return (
     <section className="container-content py-20 relative" id="activity">
       {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-orange-600/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-600/10 blur-[120px] rounded-full pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -164,17 +164,18 @@ const Activity = () => {
             )}
 
             {!isLoading && !hasError && data.length > 0 && (
-              <div className="min-w-[800px] flex justify-center">
+              <div className="flex justify-center">
                 <ActivityCalendar
                   data={data}
                   theme={customTheme}
                   colorScheme="dark"
-                  blockSize={14}
-                  blockMargin={4}
+                  blockSize={12}
+                  blockMargin={3}
                   blockRadius={3}
-                  fontSize={14}
+                  fontSize={12}
                   showWeekdayLabels
                   weekStart={1}
+                   style={{ maxWidth: "100%" }}
                   showMonthLabels={false}
                   labels={{
                     legend: { less: "Less", more: "More" },

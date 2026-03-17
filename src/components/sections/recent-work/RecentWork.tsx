@@ -200,7 +200,7 @@ const RecentWork = () => {
       </motion.div>
 
       {/* Filter tabs */}
-      <div className="flex gap-2 mb-10">
+      <div className="flex flex-wrap gap-2 mb-10">
         {filters.map((f) => (
           <button
             key={f}
