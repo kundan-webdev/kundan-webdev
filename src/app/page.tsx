@@ -13,7 +13,8 @@ import Footer from "@/components/common/Footer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col pt-28 overflow-x-hidden bg-[#080808]">
+    // pt-16 — Nitro navbar is thinner than the pill navbar
+    <div className="min-h-screen flex flex-col pt-16 overflow-x-hidden bg-[#080808]">
       <main className="flex-1">
         <Hero />
         <About />

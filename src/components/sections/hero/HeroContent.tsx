@@ -1,122 +1,141 @@
 "use client";
-
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { TypingAnimation } from "@/components/ui/TypingAnimation";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Avatar from "@/components/micro/Avatar";
-import { TextAnimate } from "@/components/ui/TextAnimate";
 import { AnimatedShinyText } from "@/components/ui/AnimatedShinyText";
 
+
 const titles = [
-  "Frontend Developer",
-  "MERN Stack Developer",
-  "UI/UX Designer",
-  "DevXClub Founder",
-  "Full-Stack Developer",
+  "no-code websites",
+  "full-stack products",
+  "software interfaces",
+  "developer tools",
+  "UI/UX systems",
 ];
 
 const HeroContent = () => {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(
-      () => setIndex((state) => (state + 1) % titles.length),
-      3000
-    );
-    return () => clearInterval(id);
-  }, []);
-
   return (
     <motion.div
-      className="max-w-[1136px] pt-10 pb-20"
+      className="max-w-[1136px] pt-16 pb-24"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: 0.5 }}
     >
-      {/* MAIN HEADING */}
-      <h1 className="text-[3rem] md:text-[4.5rem] font-medium leading-[110%] flex flex-wrap items-center gap-4">
-        <TextAnimate animation="blurInUp" by="word" delay={0.1}>
-          Hi, I’m
-        </TextAnimate>
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{
-            delay: 0.4,
-            type: "spring",
-            stiffness: 200,
-            damping: 15,
-          }}
-        >
-          <Avatar width={100} height={62} />
-        </motion.div>
-        <TextAnimate animation="blurInUp" by="word" delay={0.5}>
-          Kundan Kumar!
-        </TextAnimate>
-      </h1>
-
+      {/* ── Dot label + availability ── */}
       <motion.div
-        className="text-[2.5rem] md:text-[4rem] font-medium flex-wrap flex items-center leading-[110%] md:gap-4 mt-2 h-[3rem] md:h-[4rem] overflow-hidden"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.5 }}
+        className="flex items-center gap-3 mb-10"
       >
-        I’m a
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={index}
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -50, opacity: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="bg-clip-text text-transparent bg-[linear-gradient(-145deg,#FF923C_0%,#E66123_36%,#FB3800_100%)] h-full block ml-3 md:ml-0"
-          >
-            {titles[index]}
-          </motion.span>
-        </AnimatePresence>
-      </motion.div>
-
-      <motion.div
-        className="mt-8 flex items-baseline gap-4"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1, duration: 0.6 }}
-      >
-        <div className="group rounded-full border border-white/10 bg-white/5 transition-all ease-in hover:bg-white/10">
-          <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-2 transition ease-out hover:text-white hover:duration-300 text-sm font-medium">
-            <span>🟢 Open to Work · Frontend · Full-Stack MERN · UI/UX</span>
+        {/* <span className="text-sm text-white/40 font-medium tracking-wide">
+          <span className="text-orange-500 font-bold">.</span>kundan
+        </span>
+        <span className="w-px h-3 bg-white/10" /> */}
+        <div className="rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] transition-all">
+          <AnimatedShinyText className="inline-flex items-center px-3 py-1 text-xs font-medium text-white/50">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 mr-2 animate-pulse" />
+            available for new projects
           </AnimatedShinyText>
         </div>
       </motion.div>
 
-      {/* CTA + DESCRIPTION */}
-      <div className="mt-12 md:mt-16 flex items-start flex-col gap-6">
-        <TextAnimate
-          animation="slideUp"
-          by="line"
-          delay={1.2}
-          className="max-w-[600px] text-lg md:text-xl text-white/70 leading-relaxed"
-        >
-          {`Building real products and shipping them. Founder of DevXClub.\nFinal-year BCA from Varanasi. Leading frontend at DevXClub v2 +\nMERN dev at Solvimate. Open to full-stack roles.`}
-        </TextAnimate>
-
+      {/* ── Main headline ── */}
+      <div className="mb-8">
+        {/* Line 1 — Hey I'm + Avatar + Kundan */}
         <motion.div
-          className="flex gap-4 md:gap-6 mt-2"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.6 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="text-[clamp(2.8rem,7vw,6rem)] font-bold text-white leading-[1.05] tracking-[-0.04em] flex flex-wrap items-center gap-3"
         >
-          <Button className="px-8 py-6 rounded-full text-base">Resume</Button>
-          <a href="#projects">
-            <Button
-              variant="outline"
-              className="px-8 py-6 rounded-full text-base bg-transparent border-white/20 hover:bg-white/10"
-            >
-              View Projects
-            </Button>
-          </a>
+          <span>Hey, I'm</span>
+          <motion.span
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.35, type: "spring", stiffness: 180, damping: 14 }}
+            className="inline-block"
+          >
+            <Avatar width={110} height={65} />
+          </motion.span>
+          <span>Kundan</span>
+        </motion.div>
+
+        {/* Line 2 — "I build" + TypingAnimation */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="text-[clamp(2.4rem,6vw,5.5rem)] font-bold leading-[1.05] tracking-[-0.04em] mt-1 flex flex-wrap items-baseline gap-3"
+        >
+          <span className="text-white/30">I build</span>
+          <TypingAnimation
+            words={titles}
+            loop
+            typeSpeed={60}
+            deleteSpeed={35}
+            pauseDelay={1800}
+            delay={800}
+            startOnView={false}
+            cursorStyle="line"
+            className="bg-clip-text text-transparent bg-[linear-gradient(-145deg,#FF923C_0%,#E66123_40%,#FB3800_100%)] font-bold"
+          />
         </motion.div>
       </div>
+
+      {/* ── Sub info row ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.65, duration: 0.5 }}
+        className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 text-sm text-white/40"
+      >
+        <span className="flex items-center gap-1.5">
+          <span className="text-orange-500">→</span>
+          Founder, DevXClub
+        </span>
+        <span className="w-px h-3 bg-white/10 hidden sm:block" />
+        <span className="flex items-center gap-1.5">
+          <span className="text-orange-500">→</span>
+          Frontend Intern, Solvimate
+        </span>
+        <span className="w-px h-3 bg-white/10 hidden sm:block" />
+        <span className="flex items-center gap-1.5">
+          <span className="text-orange-500">→</span>
+          Final-year BCA, Varanasi
+        </span>
+      </motion.div>
+
+      {/* ── CTAs ── */}
+      <motion.div
+        className="flex flex-wrap gap-3"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.5 }}
+      >
+        <a href="#projects">
+          <Button className="px-7 py-5 rounded-full text-sm font-semibold bg-white text-black hover:bg-white/90 transition-all">
+            View Work
+          </Button>
+        </a>
+        <a href="/kundan-resume-mar2026.pdf" target="_blank" rel="noopener noreferrer">
+          <Button
+            variant="outline"
+            className="px-7 py-5 rounded-full text-sm font-semibold bg-transparent border-white/15 text-white/70 hover:bg-white/5 hover:text-white transition-all"
+          >
+            Resume ↗
+          </Button>
+        </a>
+        <a href="#contact">
+          <Button
+            variant="outline"
+            className="px-7 py-5 rounded-full text-sm font-semibold bg-transparent border-orange-500/30 text-orange-400 hover:bg-orange-500/5 hover:border-orange-500/60 transition-all"
+          >
+            Hire Me
+          </Button>
+        </a>
+      </motion.div>
     </motion.div>
   );
 };

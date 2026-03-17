@@ -1,21 +1,6 @@
-"use client";
+// Scroll progress is now integrated inside Navbar.tsx
+// as the border-bottom progress bar (Nitro style)
+// This component is kept for import compatibility but renders nothing.
 
-import { motion, useScroll, useSpring } from "framer-motion";
-
-const ScrollProgress = () => {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 h-[2px] bg-[#ea580c] origin-left z-[9999]"
-      style={{ scaleX }}
-    />
-  );
-};
-
+const ScrollProgress = () => null;
 export default ScrollProgress;

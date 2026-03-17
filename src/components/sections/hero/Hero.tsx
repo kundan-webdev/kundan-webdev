@@ -3,16 +3,16 @@ import { InteractiveGridPattern } from "@/components/ui/InteractiveGridPattern";
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden">
-      {/* Interactive grid background */}
+    <section className="relative overflow-hidden min-h-[90vh] flex items-center">
+      {/* Interactive grid — only hero */}
       <InteractiveGridPattern
-        squares={[40, 18]}
+        squares={[40, 20]}
         width={50}
         height={50}
-        className="opacity-60 [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black_40%,transparent_100%)]"
+        className="opacity-40 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_40%,black_30%,transparent_100%)]"
       />
-      {/* Hero content sits on top */}
-      <div className="relative z-10 container-content">
+      {/* Content */}
+      <div className="relative z-10 container-content py-0">
         <HeroContent />
       </div>
     </section>

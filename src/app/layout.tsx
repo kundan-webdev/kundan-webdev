@@ -41,7 +41,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    // Always dark — no theme toggle
+    <html lang="en" className="dark">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -49,39 +50,17 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap"
           rel="stylesheet"
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var stored = localStorage.getItem('theme');
-                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  var isDark = stored ? stored === 'dark' : prefersDark;
-                  document.documentElement.classList.toggle('dark', isDark);
-                } catch(e) {
-                  document.documentElement.classList.add('dark');
-                }
-              })();
-            `,
-          }}
-        />
       </head>
-      <body className="font-sans antialiased selection:bg-primary/30">
+      <body className="font-sans antialiased bg-[#080808] text-white selection:bg-orange-500/20">
         <SmoothScrolling>
           <ScrollProgress />
           <LoadingScreen />
-
-          {/* Grid — fixed background, z-0, fully interactive */}
           <GlobalGrid />
-
-          {/* All content — z-10, sits above grid visually */}
-          {/* NO pointer-events-none here — let everything work normally */}
           <div className="relative z-10">
             <Navbar />
             <CommandPalette />
             {children}
           </div>
-
         </SmoothScrolling>
       </body>
     </html>
