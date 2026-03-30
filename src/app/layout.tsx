@@ -1,63 +1,58 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import Navbar from "@/components/common/Navbar";
+﻿import type { Metadata } from "next";
+
 import CommandPalette from "@/components/common/CommandPalette";
-import LoadingScreen from "@/components/common/LoadingScreen";
-import SmoothScrolling from "@/components/common/SmoothScrolling";
-import ScrollProgress from "@/components/common/ScrollProgress";
+import CustomCursor from "@/components/common/CustomCursor";
 import { GlobalGrid } from "@/components/common/GlobalGrid";
+import LoadingScreen from "@/components/common/LoadingScreen";
+import Navbar from "@/components/common/Navbar";
+import ScrollProgress from "@/components/common/ScrollProgress";
+import SmoothScrolling from "@/components/common/SmoothScrolling";
+import { ThemeProvider } from "@/components/common/ThemeProvider";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://kundan-webdev.vercel.app"),
   title: {
-    default: "Kundan Kumar — Full-Stack Developer & DevXClub Founder",
-    template: "%s | Kundan Kumar",
+    default: "Kundan - Full-Stack Developer",
+    template: "%s | Kundan",
   },
   description:
-    "Final-year BCA student from Varanasi. Frontend Developer, MERN Stack, UI/UX Designer. Founder of DevXClub. Open to internships and junior roles.",
+    "Full-stack developer building production-ready products. Founder of DevXClub. MERN · Next.js · TypeScript.",
   keywords: [
-    "Kundan Kumar", "DevXClub", "Frontend Developer",
-    "MERN Stack", "Varanasi", "Next.js Developer",
-    "UI/UX Designer", "Full Stack Developer",
+    "Kundan",
+    "Full Stack Developer",
+    "Next.js",
+    "React",
+    "DevXClub",
+    "Portfolio",
+    "MERN",
+    "TypeScript",
+    "India",
+    "Varanasi",
   ],
-  authors: [{ name: "Kundan Kumar", url: "https://kundan-webdev.vercel.app" }],
-  creator: "Kundan Kumar",
+  authors: [{ name: "Kundan", url: "https://kundan-webdev.vercel.app" }],
   openGraph: {
-    title: "Kundan Kumar — Full-Stack Developer & DevXClub Founder",
-    description: "Building real products. Founder of DevXClub.",
+    title: "Kundan - Full-Stack Developer",
+    description: "Building production-ready products. Founder of DevXClub.",
     url: "https://kundan-webdev.vercel.app",
-    siteName: "Kundan Kumar Portfolio",
-    images: [{ url: "/assets/DPv2.png", width: 800, height: 800, alt: "Kundan Kumar" }],
-    locale: "en_IN",
+    siteName: "Kundan Portfolio",
+    images: [{ url: "/assets/DPv2.png", width: 400, height: 400 }],
     type: "website",
+    locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kundan Kumar — Full-Stack Developer",
-    description: "Building real products. Founder of DevXClub.",
-    creator: "@kundan_webdev",
+    title: "Kundan - Full-Stack Developer",
+    description: "Building production-ready products. Founder of DevXClub.",
     images: ["/assets/DPv2.png"],
   },
+  robots: { index: true, follow: true },
   icons: {
-    icon: [
-      { url: "/assets/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/assets/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/assets/favicon.ico" },
-    ],
+    icon: "/assets/favicon.ico",
     apple: "/assets/apple-touch-icon.png",
-    other: [
-      { rel: "manifest", url: "/assets/site.webmanifest" },
-    ],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-    },
-  },
+  manifest: "/assets/site.webmanifest",
 };
 
 export default function RootLayout({
@@ -65,29 +60,27 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body
-        className="font-sans antialiased bg-[#080808] text-white selection:bg-orange-500/20"
-        suppressHydrationWarning
-      >
-        <SmoothScrolling>
-          <ScrollProgress />
+      <body className="font-sans antialiased" suppressHydrationWarning>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange={false}
+        >
           <LoadingScreen />
-          <GlobalGrid />
-          <div className="relative z-10">
-            <Navbar />
-            <CommandPalette />
-            {children}
-          </div>
-        </SmoothScrolling>
+          <ScrollProgress />
+          <CustomCursor />
+          <SmoothScrolling>
+            <GlobalGrid />
+            <div className="relative z-10 min-h-screen bg-background text-foreground">
+              <Navbar />
+              <CommandPalette />
+              {children}
+            </div>
+          </SmoothScrolling>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
+

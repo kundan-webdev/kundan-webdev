@@ -1,21 +1,21 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { defineConfig } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({ baseDirectory: __dirname });
-
-const eslintConfig = defineConfig([
-  ...compat.extends("next/core-web-vitals"),
-  globalIgnores([
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
+export default defineConfig([
+  ...nextVitals,
+  {
+    ignores: [".next/**", "out/**", "build/**", "dist/**", "next-env.d.ts"],
+  },
+  {
+    files: ["src/components/common/CommandPalette.tsx"],
+    rules: {
+      "react/no-unescaped-entities": "off",
+    },
+  },
+  {
+    files: ["src/components/ui/TypingAnimation.tsx"],
+    rules: {
+      "react-hooks/set-state-in-effect": "off",
+    },
+  },
 ]);
-
-export default eslintConfig;

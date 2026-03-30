@@ -1,31 +1,40 @@
-"use client";
+﻿"use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+
+export type Theme = "light" | "dark";
+
+const STORAGE_KEY = "theme";
+
+function resolveInitialTheme(): Theme {
+  if (typeof window === "undefined") return "dark";
+
+  const storedTheme = localStorage.getItem(STORAGE_KEY) as Theme | null;
+  if (storedTheme) return storedTheme;
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(theme: Theme) {
+  document.documentElement.classList.toggle("dark", theme === "dark");
+  document.documentElement.classList.toggle("light", theme === "light");
+  document.documentElement.style.colorScheme = theme;
+  localStorage.setItem(STORAGE_KEY, theme);
+}
 
 export function useTheme() {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState<Theme>(resolveInitialTheme);
 
-  // Read from DOM on mount (DOM already set by inline script in layout)
   useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initial = stored ? stored : prefersDark ? "dark" : "light";
-    setTheme(initial);
+    applyTheme(theme);
+  }, [theme]);
+
+  const setSpecificTheme = useCallback((nextTheme: Theme) => {
+    setTheme(nextTheme);
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setTheme((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
-      document.documentElement.classList.toggle("dark", next === "dark");
-      localStorage.setItem("theme", next);
-      return next;
-    });
-  }, []);
-
-  const setSpecificTheme = useCallback((newTheme) => {
-    setTheme(newTheme);
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
-    localStorage.setItem("theme", newTheme);
+    setTheme((current) => (current === "dark" ? "light" : "dark"));
   }, []);
 
   return {
@@ -38,3 +47,4 @@ export function useTheme() {
 }
 
 export default useTheme;
+

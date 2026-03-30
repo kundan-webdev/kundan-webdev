@@ -1,55 +1,84 @@
-// DELETE everything, replace with this:
-export const experiences = [
+export type ExperienceType =
+  | "internship"
+  | "freelance"
+  | "founder"
+  | "full-time";
+
+export interface Experience {
+  id: string;
+  role: string;
+  company: string;
+  companyUrl?: string;
+  period: string;
+  type: ExperienceType;
+  description: string[];
+  stack: string[];
+  current: boolean;
+  location: string;
+}
+
+export const experiences: Experience[] = [
   {
-    id: 1,
+    id: "solvimate",
     role: "Frontend Developer Intern",
     company: "Solvimate",
-    duration: "[Month Year] – Present",
-    type: "Internship · Remote / Varanasi",
-    description: "Working as a MERN stack developer, leading frontend architecture and building production features. Responsible for component design, REST API integration, and delivering pixel-perfect UI from Figma designs.",
-    bullets: [
-      "Leading frontend development for the main product",
-      "Integrating React components with Express.js REST APIs using Axios",
-      "Making frontend architecture decisions — folder structure, component patterns, state management",
-      "Collaborating with backend team to define API contracts and data shape",
+    period: "2025 - Present",
+    type: "internship",
+    description: [
+      "Leading frontend implementation for real product features in a MERN environment.",
+      "Integrating React components with Express APIs and shaping clean UI flows from design files.",
+      "Helping make architectural decisions around folder structure, reusable components, and data flow.",
     ],
-    tags: ["React", "Node.js", "Express.js", "MongoDB", "JavaScript", "REST APIs", "Axios"],
-    type_badge: "Internship",
-    badge_color: "blue"
+    stack: [
+      "React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "JavaScript",
+      "REST APIs",
+      "Axios",
+    ],
+    current: true,
+    location: "Remote / Varanasi",
   },
   {
-    id: 2,
+    id: "devxclub",
     role: "Founder & Frontend Lead",
     company: "DevXClub",
-    duration: "2023 – Present",
-    type: "Self-Founded · Varanasi, India",
-    description: "Founded and lead a full-stack developer community platform. Built DevXClub v2 — a production monorepo with 5 core pillars: Community, AI Code Review, Roadmaps, Jobs, and a Studio agency arm.",
-    bullets: [
-      "Architected DevXClub v2 as a Turborepo monorepo — Next.js 15 App Router, Express.js API, shared TypeScript packages",
-      "Built complete JWT auth system — signup, login, protected routes, middleware, session management",
-      "Built Resources feature — Cloudinary file uploads, CDN delivery, MongoDB storage",
-      "Designed and built Dashboard, Profile, and Navbar with Framer Motion animations",
-      "Brought on a technical co-founder — established git workflow: feature branches → PR to dev → PR to main",
-      "Handling product roadmap, community growth strategy, and monetization planning"
+    companyUrl: "https://devxclub.com",
+    period: "2023 - Present",
+    type: "founder",
+    description: [
+      "Founded and continue to lead DevXClub as a full-stack community product for student developers.",
+      "Architected the frontend and product structure for DevXClub v2 across community, resources, jobs, and AI-assisted ideas.",
+      "Coordinated delivery, roadmap direction, and collaboration patterns while continuing to ship the core product.",
     ],
-    tags: ["Next.js 15", "TypeScript", "Express.js", "MongoDB", "Cloudinary", "Tailwind CSS", "Framer Motion", "Turborepo", "JWT Auth"],
-    type_badge: "Founder",
-    badge_color: "orange"
+    stack: [
+      "Next.js",
+      "TypeScript",
+      "Express.js",
+      "MongoDB",
+      "Cloudinary",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Turborepo",
+    ],
+    current: true,
+    location: "Varanasi, India",
   },
   {
-    id: 3,
+    id: "freelance-design",
     role: "UI/UX Designer",
     company: "Freelance",
-    duration: "2023 – Present",
-    type: "Freelance · Remote",
-    description: "Designing UI/UX for clients and collaborators via Figma — from landing pages to app screens. Paid client work and pro-bono projects for friends' startups.",
-    bullets: [
-      "Delivered multiple Figma projects for paid clients across different industries",
-      "Designed landing pages, app onboarding flows, and dashboard UIs",
-      "Dev-ready handoff with components, spacing, and color tokens documented"
+    period: "2023 - Present",
+    type: "freelance",
+    description: [
+      "Designed landing pages, onboarding flows, and dashboard screens for clients and collaborators.",
+      "Delivered developer-ready Figma files with component logic, spacing consistency, and visual direction.",
+      "Balanced usability, polish, and implementation realism across small but high-touch projects.",
     ],
-    tags: ["Figma", "UI/UX Design", "Prototyping", "Design Systems"],
-    type_badge: "Freelance",
-    badge_color: "purple"
-  }
-]
+    stack: ["Figma", "UI/UX Design", "Prototyping", "Design Systems"],
+    current: true,
+    location: "Remote",
+  },
+];

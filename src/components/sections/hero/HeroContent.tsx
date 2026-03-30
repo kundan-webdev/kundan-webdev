@@ -1,75 +1,78 @@
-"use client";
-import { TypingAnimation } from "@/components/ui/TypingAnimation";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import Avatar from "@/components/micro/Avatar";
-import { AnimatedShinyText } from "@/components/ui/AnimatedShinyText";
+﻿"use client";
 
+import { motion, type Variants } from "framer-motion";
+
+import { Avatar } from "@/components/atoms";
+import { AvailabilityBadge, CTAGroup, SubInfoRow } from "@/components/molecules";
+import { TypingAnimation } from "@/components/ui/TypingAnimation";
 
 const titles = [
-  "no-code websites",
   "full-stack products",
-  "software interfaces",
-  "developer tools",
-  "UI/UX systems",
+  "scalable systems",
+  "pixel-perfect UIs",
+  "things that ship",
 ];
 
-const HeroContent = () => {
+const container: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+  },
+};
+
+const item: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
+const avatarSpring: Variants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    transition: { type: "spring", stiffness: 180, damping: 14 },
+  },
+};
+
+export default function HeroContent() {
   return (
     <motion.div
-      className="max-w-[1136px] pt-16 pb-24"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      className="mx-auto max-w-[1136px] px-4 pb-16 pt-24 sm:px-6 md:pb-24 md:pt-32 lg:px-0"
+      variants={container}
+      initial="hidden"
+      animate="show"
     >
-      {/* ── Dot label + availability ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1, duration: 0.5 }}
-        className="flex items-center gap-3 mb-10"
-      >
-        {/* <span className="text-sm text-white/40 font-medium tracking-wide">
-          <span className="text-orange-500 font-bold">.</span>kundan
-        </span>
-        <span className="w-px h-3 bg-white/10" /> */}
-        <div className="rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] transition-all">
-          <AnimatedShinyText className="inline-flex items-center px-3 py-1 text-xs font-medium text-white/50">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 mr-2 animate-pulse" />
-            available for new projects
-          </AnimatedShinyText>
-        </div>
+      <motion.div variants={item} className="mb-8 md:mb-10">
+        <AvailabilityBadge />
       </motion.div>
 
-      {/* ── Main headline ── */}
-      <div className="mb-8">
-        {/* Line 1 — Hey I'm + Avatar + Kundan */}
+      <div className="mb-6 md:mb-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-[clamp(2.8rem,7vw,6rem)] font-bold text-white leading-[1.05] tracking-[-0.04em] flex flex-wrap items-center gap-3"
+          variants={item}
+          className="flex flex-wrap items-center gap-2 text-[clamp(2.4rem,7vw,6rem)] font-bold leading-[1.05] tracking-[-0.04em] text-[var(--text-primary)] md:gap-3"
         >
-          <span>Hey, I'm</span>
-          <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.35, type: "spring", stiffness: 180, damping: 14 }}
-            className="inline-block"
-          >
-            <Avatar width={110} height={65} />
+          <span>Hey, I&apos;m</span>
+          <motion.span variants={avatarSpring} className="inline-block">
+            <Avatar
+              width={90}
+              height={55}
+              className="md:h-[65px] md:w-[110px]"
+              priority
+            />
           </motion.span>
           <span>Kundan</span>
         </motion.div>
 
-        {/* Line 2 — "I build" + TypingAnimation */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-[clamp(2.4rem,6vw,5.5rem)] font-bold leading-[1.05] tracking-[-0.04em] mt-1 flex flex-wrap items-baseline gap-3"
+          variants={item}
+          className="mt-1 flex flex-wrap items-baseline gap-2 text-[clamp(1.8rem,5vw,5.5rem)] font-bold leading-[1.05] tracking-[-0.04em] md:gap-3"
         >
-          <span className="text-white/30">I build</span>
+          <span className="text-[var(--text-muted)]">I build</span>
           <TypingAnimation
             words={titles}
             loop
@@ -82,62 +85,31 @@ const HeroContent = () => {
             className="bg-clip-text text-transparent bg-[linear-gradient(-145deg,#FF923C_0%,#E66123_40%,#FB3800_100%)] font-bold"
           />
         </motion.div>
+
+        <motion.div variants={item} className="mt-4 md:mt-5">
+          <p className="text-sm font-medium tracking-wide text-[var(--text-muted)] md:text-base">
+            Full-Stack Developer · MERN · Next.js · TypeScript
+          </p>
+          <p className="mt-3 max-w-lg text-sm leading-relaxed text-[var(--text-secondary)] md:text-[1.05rem]">
+            I turn ideas into production-ready products — from database schema
+            to pixel-perfect UI. Currently building{" "}
+            <span className="text-[var(--brand-secondary)]">DevXClub</span>,
+            a developer community for 1000+ Indian CS students.
+          </p>
+          <p className="mt-2 text-xs text-[var(--text-faint)] md:mt-3 md:text-sm">
+            India-based · Open to remote &amp; hybrid roles
+          </p>
+        </motion.div>
       </div>
 
-      {/* ── Sub info row ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.65, duration: 0.5 }}
-        className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 text-sm text-white/40"
-      >
-        <span className="flex items-center gap-1.5">
-          <span className="text-orange-500">→</span>
-          Founder, DevXClub
-        </span>
-        <span className="w-px h-3 bg-white/10 hidden sm:block" />
-        <span className="flex items-center gap-1.5">
-          <span className="text-orange-500">→</span>
-          Frontend Intern, Solvimate
-        </span>
-        <span className="w-px h-3 bg-white/10 hidden sm:block" />
-        <span className="flex items-center gap-1.5">
-          <span className="text-orange-500">→</span>
-          Final-year BCA, Varanasi
-        </span>
+      <motion.div variants={item} className="mb-8 md:mb-10">
+        <SubInfoRow />
       </motion.div>
 
-      {/* ── CTAs ── */}
-      <motion.div
-        className="flex flex-wrap gap-3"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.5 }}
-      >
-        <a href="#projects">
-          <Button className="px-7 py-5 rounded-full text-sm font-semibold bg-white text-black hover:bg-white/90 transition-all">
-            View Work
-          </Button>
-        </a>
-        <a href="/kundan-resume-mar2026.pdf" target="_blank" rel="noopener noreferrer">
-          <Button
-            variant="outline"
-            className="px-7 py-5 rounded-full text-sm font-semibold bg-transparent border-white/15 text-white/70 hover:bg-white/5 hover:text-white transition-all"
-          >
-            Resume ↗
-          </Button>
-        </a>
-        <a href="#contact">
-          <Button
-            variant="outline"
-            className="px-7 py-5 rounded-full text-sm font-semibold bg-transparent border-orange-500/30 text-orange-400 hover:bg-orange-500/5 hover:border-orange-500/60 transition-all"
-          >
-            Hire Me
-          </Button>
-        </a>
+      <motion.div variants={item}>
+        <CTAGroup />
       </motion.div>
     </motion.div>
   );
-};
+}
 
-export default HeroContent;

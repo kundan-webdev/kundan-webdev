@@ -1,14 +1,43 @@
-"use client";
+﻿"use client";
 
 import { useRef } from "react";
 import {
   motion,
   useScroll,
   useTransform,
-  MotionValue,
+  type MotionValue,
+  type Variants,
 } from "framer-motion";
 
-/* ------------------ WORD ------------------ */
+import { SocialLinks } from "@/components/molecules";
+
+const paragraphs = [
+  "I'm a final-year BCA student from Varanasi who got obsessed with building things for the web. What started with HTML and CSS turned into a full-stack rabbit hole — React, Next.js, Node.js, MongoDB, Figma, and shipping real interfaces that feel intentional.",
+  "I founded DevXClub, a developer community platform built for coders by coders. The current version is a full-stack product with auth, resources, roadmap ideas, jobs, and a stronger product direction shaped by what student developers actually need.",
+  "Alongside DevXClub, I'm doing a MERN stack internship at Solvimate and continuing client-facing UI/UX work. I learn best by making things real, documenting the process, and improving the next build with what the last one taught me.",
+];
+
+const stats = [
+  { value: "2+", label: "Years Coding" },
+  { value: "10+", label: "Projects Shipped" },
+  { value: "1", label: "Product Founded" },
+  { value: "145", label: "GitHub Contributions" },
+];
+
+const sectionVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
+};
+
 const RevealWord = ({
   word,
   progress,
@@ -24,56 +53,33 @@ const RevealWord = ({
   const y = useTransform(progress, [start, end], [8, 0]);
 
   return (
-    <motion.span
-      style={{ opacity, y }}
-      className="inline-block mr-[0.28em] will-change-transform"
-    >
+    <motion.span style={{ opacity, y }} className="mr-[0.28em] inline-block will-change-transform">
       {word}
     </motion.span>
   );
 };
 
-/* ------------------ PARAGRAPH ------------------ */
-const RevealParagraph = ({
-  text,
-  index,
-}: {
-  text: string;
-  index: number;
-}) => {
+const RevealParagraph = ({ text, index }: { text: string; index: number }) => {
   const ref = useRef<HTMLDivElement>(null);
   const words = text.split(" ");
-
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 0.9", "end 0.2"], // FIXED
+    offset: ["start 0.9", "end 0.2"],
   });
 
   return (
-    <div
-      ref={ref}
-      className="py-14 md:py-20 border-b border-white/[0.05] last:border-0"
-    >
-      {/* index */}
-      <motion.span
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="text-[11px] text-orange-500/40 font-mono mb-5 block tracking-[0.2em]"
-      >
+    <div ref={ref} className="border-b border-[var(--border-default)] py-10 last:border-0 md:py-14">
+      <span className="mb-4 block text-[11px] font-mono tracking-[0.24em] text-[var(--brand-primary)]/60">
         {String(index + 1).padStart(2, "0")}
-      </motion.span>
-
-      {/* text */}
-      <p className="flex flex-wrap gap-y-1 text-[1.2rem] md:text-[1.45rem] font-medium text-white leading-[1.7] tracking-[-0.01em]">
-        {words.map((word, i) => {
-          const band = 1 / words.length; // FIXED
-          const wordStart = i * band;
+      </span>
+      <p className="flex flex-wrap gap-y-1 text-lg font-medium leading-[1.7] text-[var(--text-primary)] md:text-[1.35rem]">
+        {words.map((word, wordIndex) => {
+          const band = 1 / words.length;
+          const wordStart = wordIndex * band;
           const wordEnd = wordStart + band * 1.3;
-
           return (
             <RevealWord
-              key={`${word}-${i}`} // FIXED
+              key={`${word}-${wordIndex}`}
               word={word}
               progress={scrollYProgress}
               start={Math.min(wordStart, 0.9)}
@@ -86,153 +92,61 @@ const RevealParagraph = ({
   );
 };
 
-/* ------------------ STAT ------------------ */
-const StatCard = ({
-  value,
-  label,
-  delay,
-}: {
-  value: string;
-  label: string;
-  delay: number;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 16 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5, delay }}
-  >
-    <p className="text-4xl md:text-5xl font-black text-white tracking-[-0.04em] leading-none mb-1.5">
-      {value}
-    </p>
-    <p className="text-white/25 text-[11px] font-medium uppercase tracking-widest">
-      {label}
-    </p>
-  </motion.div>
-);
-
-/* ------------------ DATA ------------------ */
-const paragraphs = [
-  "I'm a final-year BCA student from Varanasi who got obsessed with building things for the web. What started with HTML and CSS turned into a full-stack rabbit hole — React, Next.js, Node.js, MongoDB, Figma, you name it. I learn by shipping.",
-  "I founded DevXClub — a developer community platform, built for coders by coders. Currently in v2: a full-stack monorepo with auth, AI code review, resources, roadmaps, and a jobs board. I built it with a co-founder and lead all frontend + architecture decisions.",
-  "Alongside DevXClub, I'm doing a MERN stack internship at Solvimate, leading frontend development. I also take Figma UI/UX work for clients. I document everything publicly — projects, failures, wins — on Instagram as @kundan_webdev. Currently open to full-stack internships and junior roles.",
-];
-
-const stats = [
-  { value: "2+", label: "Years Coding" },
-  { value: "10+", label: "Projects Shipped" },
-  { value: "1", label: "Product Founded" },
-  { value: "145", label: "GitHub Contributions" },
-];
-
-const socials = [
-  { label: "GitHub", href: "https://github.com/kundan-webdev" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/kundan-webdev" },
-  { label: "Instagram", href: "https://instagram.com/kundan_webdev" },
-  { label: "DevXClub", href: "https://devxclub.com" },
-];
-
-/* ------------------ MAIN ------------------ */
 const About = () => {
   return (
-    <section id="about" className="relative">
-      <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-24">
-        
-        {/* HEADER */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="pt-24 pb-16"
-        >
-          <span className="text-sm text-white/40 font-medium mb-5 block">
-            <span className="text-orange-500 font-bold">.</span>about
+    <section id="about" className="py-16 md:py-24">
+      <motion.div
+        className="mx-auto max-w-[1136px] px-4 sm:px-6 lg:px-0"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
+      >
+        <motion.div variants={itemVariants} className="mb-12">
+          <span className="mb-4 block text-sm font-medium text-[var(--text-muted)]">
+            <span className="text-[var(--brand-primary)]">.</span>about
           </span>
-
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0]">
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] sm:text-3xl md:text-4xl">
             Who I Am
           </h2>
         </motion.div>
 
-        {/* LAYOUT */}
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-28 pb-24 items-start">
-          
-          {/* LEFT */}
-          <div className="flex-1 min-w-0">
-            {paragraphs.map((text, i) => (
-              <RevealParagraph key={i} text={text} index={i} />
+        <div className="flex flex-col gap-12 lg:flex-row lg:gap-20">
+          <div className="min-w-0 flex-1">
+            {paragraphs.map((text, index) => (
+              <RevealParagraph key={index} text={text} index={index} />
             ))}
           </div>
 
-          {/* RIGHT SIDEBAR */}
-          <aside className="lg:w-[260px] w-full shrink-0 lg:sticky lg:top-28 self-start">
-            <div className="space-y-10">
-
-              {/* STATS */}
-              <div className="grid grid-cols-2 gap-x-6 gap-y-8">
-                {stats.map((s, i) => (
-                  <StatCard
-                    key={i}
-                    value={s.value}
-                    label={s.label}
-                    delay={i * 0.08}
-                  />
+          <motion.aside variants={itemVariants} className="w-full shrink-0 lg:w-[280px] lg:sticky lg:top-28">
+            <div className="space-y-8 rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-4 sm:p-6">
+              <div className="grid grid-cols-2 gap-4">
+                {stats.map((stat) => (
+                  <div key={stat.label}>
+                    <p className="text-3xl font-bold text-[var(--text-primary)]">{stat.value}</p>
+                    <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-[var(--text-faint)]">
+                      {stat.label}
+                    </p>
+                  </div>
                 ))}
               </div>
-
-              <div className="h-px bg-white/[0.06]" />
-
-              {/* SOCIALS */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <p className="text-[10px] text-white/20 uppercase tracking-[0.2em] mb-4">
+              <div className="border-t border-[var(--border-default)] pt-6">
+                <p className="mb-4 text-[11px] uppercase tracking-[0.24em] text-[var(--text-faint)]">
                   Find me on
                 </p>
-
-                <div className="space-y-2">
-                  {socials.map(({ label, href }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between py-1.5 text-sm text-white/40 hover:text-white transition-colors group"
-                    >
-                      <span>{label}</span>
-                      <span className="text-white/15 group-hover:text-orange-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-xs">
-                        ↗
-                      </span>
-                    </a>
-                  ))}
-                </div>
-              </motion.div>
-
-              <div className="h-px bg-white/[0.06]" />
-
-              {/* AVAILABILITY */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.3 }}
-                className="flex items-center gap-2"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
-                <span className="text-xs text-white/30">
-                  Available for new opportunities
-                </span>
-              </motion.div>
+                <SocialLinks className="flex-col items-start gap-3" include={["github", "linkedin", "instagram", "devxclub"]} />
+              </div>
+              <div className="border-t border-[var(--border-default)] pt-6 text-sm text-[var(--text-secondary)]">
+                <span className="mr-2 inline-block h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+                Available for new opportunities
+              </div>
             </div>
-          </aside>
+          </motion.aside>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
 
 export default About;
+

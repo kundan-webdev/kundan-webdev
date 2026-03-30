@@ -13,15 +13,23 @@
 # testing
 /coverage
 
-# next.js
+# Build outputs
+dist/
 /.next/
 /out/
-
-# production
 /build
 
-# misc
+# Environment
+.env
+.env.local
+.env.production
+.env*
+
+# OS
 .DS_Store
+Thumbs.db
+
+# misc
 *.pem
 
 # debug
@@ -30,8 +38,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# Editor
+.vscode/
+.idea/
 
 # vercel
 .vercel

@@ -1,73 +1,85 @@
-"use client";
+﻿"use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 const reels = [
-  { title: "Building DevXClub v2 — Week 1", image: null },
-  { title: "My MERN Stack Journey", image: null },
-  { title: "From BCA Student to Founder", image: null },
+  { title: "Building DevXClub v2 - Week 1" },
+  { title: "My MERN Stack Journey" },
+  { title: "From BCA Student to Founder" },
 ];
+
+const container: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+};
+
+const item: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
+};
 
 const BuildInPublic = () => {
   return (
-    <section className="container-content py-20 md:py-28" id="building">
+    <section id="building" className="py-16 md:py-24">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6 }}
-        className="mb-12"
+        className="mx-auto max-w-[1136px] px-4 sm:px-6 lg:px-0"
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
       >
-        <span className="text-sm text-white/40 font-medium mb-4 block">
-          <span className="text-orange-500 font-bold">.</span>building in public
-        </span>
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0] mb-4">
-          Building in Public
-        </h2>
-        <p className="text-[#777] max-w-2xl text-lg">
-          I document my dev journey every week — projects, learnings, failures, and wins. No filters, just real progress. Follow along on Instagram @kundan_webdev
-        </p>
-      </motion.div>
+        <motion.div variants={item} className="mb-12">
+          <span className="mb-4 block text-sm font-medium text-[var(--text-muted)]">
+            <span className="text-[var(--brand-primary)]">.</span>building in public
+          </span>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] sm:text-3xl md:text-4xl">
+            Building in Public
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
+            I document the messy middle as much as the polished end result — projects, learnings, setbacks, and what shipping actually feels like.
+          </p>
+        </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        {reels.map((reel, i) => (
-          <motion.a
-            key={i}
+        <motion.div variants={container} className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
+          {reels.map((reel) => (
+            <motion.div key={reel.title} variants={item}>
+              <Link
+                href="https://instagram.com/kundan_webdev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex aspect-square items-center justify-center rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-6 text-center transition-all hover:border-[var(--border-strong)]"
+              >
+                <div>
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--bg-elevated)] text-[var(--brand-primary)]">
+                    <ArrowUpRight size={18} />
+                  </div>
+                  <p className="text-sm font-medium text-[var(--text-primary)]">{reel.title}</p>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div variants={item}>
+          <Link
             href="https://instagram.com/kundan_webdev"
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: i * 0.1 }}
-            className="group aspect-square bg-[#0f0f0f] border border-[#1c1c1c] rounded-xl flex items-center justify-center hover:border-[#2a2a2a] transition-all duration-300 relative overflow-hidden"
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white"
           >
-            <div className="text-center p-6">
-              <div className="w-12 h-12 rounded-full bg-[#1c1c1c] mx-auto mb-4 flex items-center justify-center">
-                <svg className="w-5 h-5 text-[#777]" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-              <p className="text-white/60 text-sm font-medium">{reel.title}</p>
-            </div>
-            <div className="absolute inset-0 bg-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </motion.a>
-        ))}
-      </div>
-
-      <motion.a
-        href="https://instagram.com/kundan_webdev"
-        target="_blank"
-        rel="noopener noreferrer"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="inline-flex px-8 py-4 bg-[#ea580c] text-white rounded-full font-medium hover:bg-orange-600 transition-colors"
-      >
-        Follow @kundan_webdev
-      </motion.a>
+            Follow @kundan_webdev <ArrowUpRight size={14} />
+          </Link>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };
 
 export default BuildInPublic;
+

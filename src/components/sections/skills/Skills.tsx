@@ -1,69 +1,130 @@
-"use client";
-import { motion } from "framer-motion";
+﻿"use client";
+
+import { motion, type Variants } from "framer-motion";
+
+import { SkillTag } from "@/components/molecules";
 
 const skillsData = [
   {
-    category: "FRONTEND",
-    color: "text-orange-500 border-orange-500/20 bg-orange-500/10",
-    tags: ["Next.js 15", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "GSAP", "HTML5", "CSS3/SCSS", "JavaScript ES6+", "shadcn/ui"]
+    category: "Frontend",
+    accent: "text-[var(--brand-primary)]",
+    tags: [
+      "Next.js 15",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "GSAP",
+      "HTML5",
+      "CSS3/SCSS",
+      "JavaScript ES6+",
+      "shadcn/ui",
+    ],
   },
   {
-    category: "BACKEND",
-    color: "text-blue-500 border-blue-500/20 bg-blue-500/10",
-    tags: ["Node.js", "Express.js", "MongoDB", "Mongoose", "JWT Auth", "REST API Design", "Cloudinary", "Multer", "express-validator", "bcryptjs"]
+    category: "Backend",
+    accent: "text-sky-500",
+    tags: [
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Mongoose",
+      "JWT Auth",
+      "REST API Design",
+      "Cloudinary",
+      "Multer",
+      "Zod",
+      "bcryptjs",
+    ],
   },
   {
-    category: "DESIGN",
-    color: "text-purple-500 border-purple-500/20 bg-purple-500/10",
-    tags: ["Figma", "UI/UX Design", "Wireframing", "Prototyping", "Design Systems", "Component Design"]
+    category: "Design",
+    accent: "text-fuchsia-500",
+    tags: [
+      "Figma",
+      "UI/UX Design",
+      "Wireframing",
+      "Prototyping",
+      "Design Systems",
+      "Component Design",
+    ],
   },
   {
-    category: "TOOLS",
-    color: "text-green-500 border-green-500/20 bg-green-500/10",
-    tags: ["Git/GitHub", "Turborepo", "npm Workspaces", "Vercel", "Render", "Postman", "VS Code"]
-  }
+    category: "Tools",
+    accent: "text-emerald-500",
+    tags: [
+      "Git/GitHub",
+      "Turborepo",
+      "npm Workspaces",
+      "Vercel",
+      "Render",
+      "Postman",
+      "VS Code",
+    ],
+  },
 ];
+
+const container: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
+const item: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
+};
 
 const Skills = () => {
   return (
-    <section className="container-content py-20 md:py-28" id="skills">
-      <div className="mb-10">
-        <span className="text-sm text-white/40 font-medium mb-4 block">
-          <span className="text-orange-500 font-bold">.</span>skills
-        </span>
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0]">
-          My Toolkit
-        </h2>
-        <p className="text-[#777] max-w-2xl text-lg mt-4">
-          Things I build with daily, things I&apos;m growing in, and tools I use to design and ship.
-        </p>
-      </div>
+    <section id="skills" className="py-16 md:py-24">
+      <motion.div
+        className="mx-auto max-w-[1136px] px-4 sm:px-6 lg:px-0"
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
+      >
+        <motion.div variants={item} className="mb-12">
+          <span className="mb-4 block text-sm font-medium text-[var(--text-muted)]">
+            <span className="text-[var(--brand-primary)]">.</span>skills
+          </span>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] sm:text-3xl md:text-4xl">
+            My Toolkit
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
+            Things I build with daily, things I&apos;m growing in, and the tools I rely on to design, ship, and iterate.
+          </p>
+        </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-        {skillsData.map((group, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="p-8 rounded-xl bg-[#0f0f0f] border border-[#1c1c1c] hover:border-[#2a2a2a] transition-all duration-300"
-          >
-            <h3 className={`text-sm font-bold tracking-widest mb-6 ${group.color.split(" ")[0]}`}>
-              {group.category}
-            </h3>
-            <div className="flex flex-wrap gap-3">
-              {group.tags.map((tag, j) => (
-                <span key={j} className={`px-4 py-2 rounded-full text-sm font-medium border ${group.color}`}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        ))}
-      </div>
+        <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6" variants={container}>
+          {skillsData.map((group) => (
+            <motion.article
+              key={group.category}
+              variants={item}
+              className="rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-4 sm:p-6"
+            >
+              <h3 className={`mb-6 text-sm font-bold uppercase tracking-[0.24em] ${group.accent}`}>
+                {group.category}
+              </h3>
+              <div className="flex flex-wrap gap-2 md:gap-3">
+                {group.tags.map((tag) => (
+                  <SkillTag key={tag} label={tag} />
+                ))}
+              </div>
+            </motion.article>
+          ))}
+        </motion.div>
+      </motion.div>
     </section>
   );
 };
 
 export default Skills;
+

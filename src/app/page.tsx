@@ -1,21 +1,28 @@
+﻿import dynamic from "next/dynamic";
+
 import Hero from "@/components/sections/hero/Hero";
-import About from "@/components/sections/about/About";
-import RecentWork from "@/components/sections/recent-work/RecentWork";
-import Activity from "@/components/sections/activity/Activity";
-import Experience from "@/components/sections/experience/Experience";
-import Certificates from "@/components/sections/certificates/Certificates";
-import Skills from "@/components/sections/skills/Skills";
-import FounderBanner from "@/components/sections/experience/FounderBanner";
-import Testimonials from "@/components/sections/testimonials/Testimonials";
-import BuildInPublic from "@/components/sections/building-in-public/BuildInPublic";
-import Contact from "@/components/sections/contact/Contact";
-import Footer from "@/components/common/Footer";
+
+const About = dynamic(() => import("@/components/sections/about/About"));
+const Skills = dynamic(() => import("@/components/sections/skills/Skills"));
+const RecentWork = dynamic(() => import("@/components/sections/recent-work/RecentWork"));
+const FounderBanner = dynamic(() => import("@/components/sections/experience/FounderBanner"));
+const Experience = dynamic(() => import("@/components/sections/experience/Experience"));
+const Activity = dynamic(() => import("@/components/sections/activity/Activity"));
+const BuildInPublic = dynamic(
+  () => import("@/components/sections/building-in-public/BuildInPublic"),
+);
+const Certificates = dynamic(
+  () => import("@/components/sections/certificates/Certificates"),
+);
+const Testimonials = dynamic(
+  () => import("@/components/sections/testimonials/Testimonials"),
+);
+const Contact = dynamic(() => import("@/components/sections/contact/Contact"));
+const Footer = dynamic(() => import("@/components/common/Footer"));
 
 export default function Home() {
   return (
-    // overflow-x-hidden REMOVED — it kills position:sticky on child elements
-    // overflow-x is handled per-section instead
-    <div className="min-h-screen flex flex-col pt-16 bg-[#080808]">
+    <div className="min-h-screen bg-background pt-16 text-foreground">
       <main className="flex-1">
         <Hero />
         <About />
@@ -33,3 +40,4 @@ export default function Home() {
     </div>
   );
 }
+

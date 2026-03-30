@@ -1,265 +1,178 @@
-"use client";
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { projects } from "@/data/projects";
+﻿"use client";
+
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-const filters = ["all", "frontend", "backend", "design"];
+import { ProjectMeta } from "@/components/molecules";
+import { projects, type ProjectCategory } from "@/data/projects";
 
-// Badge color map
-const badgeColorMap: Record<string, string> = {
-  orange: "text-orange-400",
-  blue:   "text-blue-400",
-  purple: "text-purple-400",
-  green:  "text-green-400",
+const filters: { id: ProjectCategory; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "frontend", label: "Frontend" },
+  { id: "backend", label: "Backend" },
+  { id: "design", label: "Design" },
+];
+
+const sectionVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
 };
 
-// ── Nitro-style editorial project row ──────────────────────
-const ProjectRow = ({ p, index }: { p: any; index: number }) => {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4, delay: index * 0.06 }}
-    >
-      <Link href={`/projects/${p.id}`}>
-        <div
-          className="group flex items-center justify-between py-5 border-b border-white/[0.06] cursor-pointer transition-all duration-300 hover:px-2"
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-        >
-          {/* Left — year + title */}
-          <div className="flex items-center gap-6 min-w-0">
-            <span className="text-xs text-white/25 font-medium w-8 shrink-0">
-              {p.year || "2025"}
-            </span>
-            <div className="min-w-0">
-              <h3 className="text-base md:text-lg font-semibold text-white group-hover:text-orange-400 transition-colors truncate">
-                {p.title}
-              </h3>
-              {p.description && (
-                <p className="text-xs text-white/35 mt-0.5 line-clamp-1 max-w-md hidden md:block">
-                  {p.description}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Right — category + arrow */}
-          <div className="flex items-center gap-4 shrink-0 ml-4">
-            {/* Tags — hidden on mobile */}
-            <div className="hidden lg:flex gap-2">
-              {p.tags?.slice(0, 3).map((tag: string, i: number) => (
-                <span
-                  key={i}
-                  className="text-[11px] text-white/25 bg-white/[0.04] px-2 py-0.5 rounded-full border border-white/[0.06]"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* Badge — category */}
-            <span className={`text-xs font-medium hidden sm:block ${badgeColorMap[p.badge_color] || "text-white/40"}`}>
-              {p.badge}
-            </span>
-
-            {/* Arrow */}
-            <motion.div
-              animate={{ x: hovered ? 2 : 0, opacity: hovered ? 1 : 0.3 }}
-              transition={{ duration: 0.2 }}
-              className="w-7 h-7 rounded-full border border-white/10 flex items-center justify-center group-hover:border-orange-500/40 group-hover:bg-orange-500/5 transition-colors"
-            >
-              <ArrowUpRight size={13} className="text-white/60 group-hover:text-orange-400 transition-colors" />
-            </motion.div>
-          </div>
-        </div>
-      </Link>
-    </motion.div>
-  );
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
 };
 
-// ── Featured card — large, spans full width ─────────────────
-const FeaturedCard = ({ p }: { p: any }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5 }}
-    className="mb-4"
-  >
-    <div
-      className="group relative rounded-2xl border border-orange-500/20 bg-[#0c0800] overflow-hidden hover:border-orange-500/40 transition-all duration-500 cursor-pointer"
-      onClick={() => window.location.href = `/projects/${p.id}`}
-    >
-      {/* Image */}
-      {p.image && (
-        <div className="w-full h-56 md:h-72 overflow-hidden">
-          <img
-            src={p.image}
-            alt={p.title}
-            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
-          />
-        </div>
-      )}
-
-      <div className="p-6 md:p-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-        <div>
-          <span className="text-xs text-orange-500/60 font-medium mb-2 block">
-            <span className="text-orange-500">.</span>featured
-          </span>
-          <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight group-hover:text-orange-400 transition-colors">
-            {p.title}
-          </h3>
-          <p className="text-white/50 text-sm mt-2 max-w-lg leading-relaxed">
-            {p.description}
-          </p>
-        </div>
-
-        {/* Links — stop propagation so card click doesn't fire */}
-        <div className="flex gap-3 shrink-0">
-          {p.links?.live && p.links.live !== "#" && (
-            <a
-              href={p.links.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold transition-colors"
-            >
-              Live ↗
-            </a>
-          )}
-          {p.links?.github && p.links.github !== "#" && (
-            <a
-              href={p.links.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-white/10 hover:border-white/20 text-white/60 hover:text-white text-xs font-semibold transition-colors"
-            >
-              GitHub ↗
-            </a>
-          )}
-        </div>
-      </div>
-    </div>
-  </motion.div>
-);
-
-// ── Main Section ────────────────────────────────────────────
 const RecentWork = () => {
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState<ProjectCategory>("all");
 
   useEffect(() => {
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail?.filter) {
-        setActiveFilter(detail.filter);
-        document
-          .getElementById("projects")
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<{ filter?: ProjectCategory }>).detail;
+      if (!detail?.filter) return;
+      setActiveFilter(detail.filter);
+      document.getElementById("projects")?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
+
     window.addEventListener("setProjectFilter", handler);
     return () => window.removeEventListener("setProjectFilter", handler);
   }, []);
 
-  const featured = projects.find((p: any) => p.featured);
-  const rest = projects.filter((p: any) =>
-    !p.featured && p.type.includes(activeFilter)
-  );
-  const filteredFeatured = featured && featured.type.includes(activeFilter) ? featured : null;
+  const filteredProjects = projects.filter((project) => project.categories.includes(activeFilter));
+  const featuredProject = filteredProjects.find((project) => project.featured) ?? null;
+  const restProjects = filteredProjects.filter((project) => project.id !== featuredProject?.id);
 
   return (
-    <section className="container-content" id="projects">
-      {/* Section header */}
+    <section id="projects" className="py-16 md:py-24">
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+        className="mx-auto max-w-[1136px] px-4 sm:px-6 lg:px-0"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
       >
-        <div>
-          {/* Nitro dot label */}
-          <span className="text-sm text-white/40 font-medium mb-4 block">
-            <span className="text-orange-500 font-bold">.</span>work
-          </span>
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0]">
-            Selected<br />Projects
-          </h2>
-        </div>
-
-        <p className="text-white/40 text-sm max-w-xs leading-relaxed md:text-right">
-          Full-stack products, backend APIs, frontend builds, and UI/UX design — all shipped, no tutorials.
-        </p>
-      </motion.div>
-
-      {/* Filter tabs */}
-      <div className="flex flex-wrap gap-2 mb-10">
-        {filters.map((f) => (
-          <button
-            key={f}
-            onClick={() => setActiveFilter(f)}
-            className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all capitalize ${
-              activeFilter === f
-                ? "bg-orange-500 text-white"
-                : "text-white/40 border border-white/[0.08] hover:border-white/20 hover:text-white"
-            }`}
-          >
-            {f}
-          </button>
-        ))}
-      </div>
-
-      {/* Featured card */}
-      <AnimatePresence>
-        {filteredFeatured && <FeaturedCard key="featured" p={filteredFeatured} />}
-      </AnimatePresence>
-
-      {/* Editorial rows — all non-featured projects */}
-      <div className="mt-2">
-        {/* Border top */}
-        {rest.length > 0 && (
-          <div className="border-t border-white/[0.06]" />
-        )}
-        <AnimatePresence mode="popLayout">
-          {rest.map((p: any, i: number) => (
-            <ProjectRow key={p.id} p={p} index={i} />
-          ))}
-        </AnimatePresence>
-
-        {rest.length === 0 && !filteredFeatured && (
-          <div className="text-center py-20 text-white/20">
-            <p className="text-base">No projects in this category yet.</p>
-          </div>
-        )}
-      </div>
-
-      {/* View all link — Nitro style */}
-      {activeFilter === "all" && (
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.3 }}
-          className="mt-10 flex justify-center"
+          variants={itemVariants}
+          className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
-          <a
-            href="#contact"
-            className="flex items-center gap-2 text-sm text-white/30 hover:text-white transition-colors group"
-          >
-            <span>Want to work together?</span>
-            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </a>
+          <div>
+            <span className="mb-4 block text-sm font-medium text-[var(--text-muted)]">
+              <span className="text-[var(--brand-primary)]">.</span>work
+            </span>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] sm:text-3xl md:text-4xl">
+              Selected Projects
+            </h2>
+          </div>
+          <p className="max-w-xs text-sm leading-relaxed text-[var(--text-secondary)] md:text-right">
+            Full-stack products, backend APIs, frontend builds, and UI/UX work that reflects how I like to ship.
+          </p>
         </motion.div>
-      )}
+
+        <motion.div variants={itemVariants} className="mb-8 flex flex-wrap gap-2 md:gap-3">
+          {filters.map((filter) => {
+            const isActive = activeFilter === filter.id;
+            return (
+              <button
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                className={`min-h-[44px] rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide transition-colors ${
+                  isActive
+                    ? "bg-primary text-white"
+                    : "border border-[var(--border-default)] text-[var(--text-muted)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]"
+                }`}
+              >
+                {filter.label}
+              </button>
+            );
+          })}
+        </motion.div>
+
+        <AnimatePresence mode="wait">
+          <motion.div key={activeFilter} variants={sectionVariants} initial="hidden" animate="show" exit={{ opacity: 0 }}>
+            {featuredProject && (
+              <motion.div variants={itemVariants} className="mb-6">
+                <Link href={`/projects/${featuredProject.id}`} className="group block overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] transition-all duration-300 hover:border-[var(--border-strong)]">
+                  <div className="relative aspect-[16/9] overflow-hidden border-b border-[var(--border-default)]">
+                    <Image
+                      src={featuredProject.image}
+                      alt={featuredProject.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-5 p-4 sm:p-6 md:flex-row md:items-end md:justify-between">
+                    <div>
+                      <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
+                        Featured
+                      </span>
+                      <h3 className="text-2xl font-semibold text-[var(--text-primary)] md:text-3xl">
+                        {featuredProject.title}
+                      </h3>
+                      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
+                        {featuredProject.shortDesc}
+                      </p>
+                      <ProjectMeta stack={featuredProject.stack} className="mt-4" />
+                    </div>
+                    <span className="inline-flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)] transition-colors group-hover:text-[var(--text-primary)]">
+                      View project <ArrowUpRight size={14} />
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            )}
+
+            <div>
+              {restProjects.length > 0 && <div className="border-t border-[var(--border-default)]" />}
+              {restProjects.map((project) => (
+                <motion.div key={project.id} variants={itemVariants}>
+                  <Link
+                    href={`/projects/${project.id}`}
+                    className="group flex flex-col gap-3 border-b border-[var(--border-default)] py-5 transition-all hover:px-1 md:flex-row md:items-center md:justify-between"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-3">
+                        <span className="w-10 shrink-0 text-xs text-[var(--text-faint)]">
+                          {project.year}
+                        </span>
+                        <h3 className="text-lg font-semibold text-[var(--text-primary)] transition-colors group-hover:text-[var(--brand-primary)]">
+                          {project.title}
+                        </h3>
+                      </div>
+                      <p className="mt-2 max-w-xl text-sm leading-relaxed text-[var(--text-secondary)] sm:pl-[3.25rem] md:pl-0">
+                        {project.shortDesc}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="hidden text-xs font-medium uppercase tracking-wide text-[var(--text-muted)] sm:block">
+                        {project.label}
+                      </span>
+                      <span className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[var(--border-default)] text-[var(--text-secondary)] transition-all group-hover:border-[var(--border-strong)] group-hover:text-[var(--text-primary)]">
+                        <ArrowUpRight size={14} />
+                      </span>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+
+              {restProjects.length === 0 && !featuredProject && (
+                <motion.div variants={itemVariants} className="py-16 text-center text-[var(--text-muted)]">
+                  No projects in this category yet.
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
     </section>
   );
 };
 
 export default RecentWork;
+

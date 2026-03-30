@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Moon, Sun } from "lucide-react";
@@ -16,7 +16,7 @@ export const AnimatedThemeToggler = ({
   duration = 400,
   ...props
 }: AnimatedThemeTogglerProps) => {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -39,6 +39,20 @@ export const AnimatedThemeToggler = ({
     const button = buttonRef.current;
     if (!button) return;
 
+    const applyTheme = () => {
+      const nextIsDark = !isDark;
+      setIsDark(nextIsDark);
+      document.documentElement.classList.toggle("dark", nextIsDark);
+      document.documentElement.classList.toggle("light", !nextIsDark);
+      document.documentElement.style.colorScheme = nextIsDark ? "dark" : "light";
+      localStorage.setItem("theme", nextIsDark ? "dark" : "light");
+    };
+
+    if (!document.startViewTransition) {
+      applyTheme();
+      return;
+    }
+
     const { top, left, width, height } = button.getBoundingClientRect();
     const x = left + width / 2;
     const y = top + height / 2;
@@ -46,45 +60,29 @@ export const AnimatedThemeToggler = ({
     const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
     const maxRadius = Math.hypot(
       Math.max(x, viewportWidth - x),
-      Math.max(y, viewportHeight - y)
+      Math.max(y, viewportHeight - y),
     );
-
-    const applyTheme = () => {
-      const newTheme = !isDark;
-      setIsDark(newTheme);
-      document.documentElement.classList.toggle("dark");
-      localStorage.setItem("theme", newTheme ? "dark" : "light");
-    };
-
-    // Fallback for browsers without View Transitions API
-    if (!document.startViewTransition) {
-      applyTheme();
-      return;
-    }
 
     const transition = document.startViewTransition(() => {
       flushSync(applyTheme);
     });
 
-    const ready = transition?.ready;
-    if (ready && typeof ready.then === "function") {
-      ready.then(() => {
-        document.documentElement.animate(
-          {
-            clipPath: [
-              `circle(0px at ${x}px ${y}px)`,
-              `circle(${maxRadius}px at ${x}px ${y}px)`,
-            ],
-          },
-          {
-            duration,
-            easing: "ease-in-out",
-            pseudoElement: "::view-transition-new(root)",
-          }
-        );
-      });
-    }
-  }, [isDark, duration]);
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${maxRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration,
+          easing: "ease-in-out",
+          pseudoElement: "::view-transition-new(root)",
+        },
+      );
+    });
+  }, [duration, isDark]);
 
   return (
     <button
@@ -92,14 +90,16 @@ export const AnimatedThemeToggler = ({
       ref={buttonRef}
       onClick={toggleTheme}
       className={cn(
-        "relative flex items-center justify-center rounded-full p-2 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200",
-        className
+        "relative flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[var(--border-default)] bg-[var(--bg-overlay)] p-2 text-[var(--text-secondary)] transition-colors hover:border-[var(--border-strong)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
+        className,
       )}
+      title="Toggle theme"
+      aria-label="Toggle theme"
       {...props}
-      title="Toggle Dark Mode"
     >
-      {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
       <span className="sr-only">Toggle theme</span>
     </button>
   );
 };
+

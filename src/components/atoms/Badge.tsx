@@ -1,22 +1,25 @@
-const Badge = ({ text }) => {
+﻿import { cn } from "@/lib/utils";
+
+interface BadgeProps {
+  text?: string;
+  className?: string;
+}
+
+export function Badge({ text, className }: BadgeProps) {
+  if (!text) return null;
+
   return (
     <span
-      className="
-        flex items-center gap-1.5
-        px-2.5 py-1.5
-        rounded-full
-        bg-white/10 backdrop-blur-md
-        border border-white/20
-        text-white text-sm font-normal
-        shrink-0
-      "
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border border-[var(--border-strong)] bg-[var(--bg-overlay)] px-2.5 py-1.5 text-xs font-medium text-[var(--text-secondary)]",
+        className,
+      )}
     >
-      {/* Pulsing green dot */}
-      <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-
+      <span className="h-2 w-2 rounded-full bg-[var(--brand-secondary)]" />
       {text}
     </span>
   );
-};
+}
 
 export default Badge;
+

@@ -1,10 +1,15 @@
-"use client";
+﻿"use client";
 import { useEffect, useRef, useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const morphTime = 1.2;
-const cooldownTime = 0.6;
-const texts = ["Kundan Kumar", "Web Developer", "Web Designer", "MERN Stack Developer"];
+const morphTime = 0.6;
+const cooldownTime = 0.3;
+const texts = [
+  "Kundan Kumar",
+  "Frontend Developer",
+  "React • Next.js • TypeScript",
+  "Open to Work",
+];
 
 const LoadingScreen = () => {
   const [visible, setVisible] = useState(true);
@@ -13,7 +18,7 @@ const LoadingScreen = () => {
   const textIndexRef = useRef(0);
   const morphRef = useRef(0);
   const cooldownRef = useRef(0);
-  const timeRef = useRef(Date.now());
+  const timeRef = useRef(0);
   const rafRef = useRef<number | null>(null);
 
   const setStyles = useCallback((fraction: number) => {
@@ -24,9 +29,9 @@ const LoadingScreen = () => {
     t2.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`;
     t2.style.opacity = `${Math.pow(fraction, 0.4) * 100}%`;
 
-    const inv = 1 - fraction;
-    t1.style.filter = `blur(${Math.min(8 / inv - 8, 100)}px)`;
-    t1.style.opacity = `${Math.pow(inv, 0.4) * 100}%`;
+    const inverse = 1 - fraction;
+    t1.style.filter = `blur(${Math.min(8 / inverse - 8, 100)}px)`;
+    t1.style.opacity = `${Math.pow(inverse, 0.4) * 100}%`;
 
     t1.textContent = texts[textIndexRef.current % texts.length];
     t2.textContent = texts[(textIndexRef.current + 1) % texts.length];
@@ -42,7 +47,7 @@ const LoadingScreen = () => {
       fraction = 1;
     }
     setStyles(fraction);
-    if (fraction === 1) textIndexRef.current++;
+    if (fraction === 1) textIndexRef.current += 1;
   }, [setStyles]);
 
   const doCooldown = useCallback(() => {
@@ -58,6 +63,8 @@ const LoadingScreen = () => {
   }, []);
 
   useEffect(() => {
+    timeRef.current = Date.now();
+
     const animate = () => {
       rafRef.current = requestAnimationFrame(animate);
       const now = Date.now();
@@ -70,7 +77,6 @@ const LoadingScreen = () => {
 
     rafRef.current = requestAnimationFrame(animate);
 
-    // Auto-dismiss after texts.length * (morphTime + cooldownTime) + small buffer
     const dismissTime = texts.length * (morphTime + cooldownTime) * 1000;
     const timer = setTimeout(() => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -88,11 +94,10 @@ const LoadingScreen = () => {
       {visible && (
         <motion.div
           key="loading"
-          className="fixed inset-0 z-[99999] bg-black flex items-center justify-center"
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-black"
           exit={{ y: "-100%", transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] } }}
         >
-          {/* SVG blur-morph filter */}
-          <svg className="fixed w-0 h-0" aria-hidden>
+          <svg className="fixed h-0 w-0" aria-hidden>
             <defs>
               <filter id="morph-threshold">
                 <feColorMatrix
@@ -104,9 +109,8 @@ const LoadingScreen = () => {
             </defs>
           </svg>
 
-          {/* Morphing text */}
           <div
-            className="relative w-full max-w-2xl h-24 text-center"
+            className="relative h-24 w-full max-w-2xl text-center"
             style={{ filter: "url(#morph-threshold) blur(0.5px)" }}
           >
             <span
@@ -121,12 +125,14 @@ const LoadingScreen = () => {
             />
           </div>
 
-          {/* Subtle progress line */}
           <motion.div
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 h-[2px] bg-orange-500 rounded-full"
+            className="absolute bottom-10 left-1/2 h-[2px] -translate-x-1/2 rounded-full bg-orange-500"
             initial={{ width: 0 }}
             animate={{ width: "120px" }}
-            transition={{ duration: texts.length * (morphTime + cooldownTime) * 0.9, ease: "linear" }}
+            transition={{
+              duration: texts.length * (morphTime + cooldownTime) * 0.9,
+              ease: "linear",
+            }}
           />
         </motion.div>
       )}
@@ -135,3 +141,4 @@ const LoadingScreen = () => {
 };
 
 export default LoadingScreen;
+

@@ -1,55 +1,75 @@
-"use client";
+﻿"use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
+
 import { testimonials } from "@/data/testimonials";
+
+const container: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+};
+
+const item: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: "easeOut" },
+  },
+};
 
 const Testimonials = () => {
   return (
-    <section className="container-content py-20 md:py-28" id="testimonials">
+    <section id="testimonials" className="py-16 md:py-24">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6 }}
-        className="mb-12"
+        className="mx-auto max-w-[1136px] px-4 sm:px-6 lg:px-0"
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
       >
-        <span className="text-sm text-white/40 font-medium mb-4 block">
-          <span className="text-orange-500 font-bold">.</span>testimonials
-        </span>
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] leading-[1.0] mb-4">What People Say</h2>
-      </motion.div>
+        <motion.div variants={item} className="mb-12">
+          <span className="mb-4 block text-sm font-medium text-[var(--text-muted)]">
+            <span className="text-[var(--brand-primary)]">.</span>testimonials
+          </span>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] sm:text-3xl md:text-4xl">
+            What People Say
+          </h2>
+        </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {testimonials.map((t: any, i: number) => (
+        {testimonials.length === 0 ? (
           <motion.div
-            key={t.id}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="bg-[#0f0f0f] border border-[#1c1c1c] rounded-xl p-8 hover:border-[#2a2a2a] transition-all duration-300"
+            variants={item}
+            className="rounded-[var(--radius-lg)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface)] p-6 text-sm text-[var(--text-secondary)]"
           >
-            {/* Quote mark */}
-            <span className="text-4xl text-orange-500 font-serif leading-none block mb-4">&ldquo;</span>
-            
-            <p className="text-white/70 text-base leading-relaxed mb-8 min-h-[60px]">
-              {t.quote}
-            </p>
-
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#1c1c1c] flex items-center justify-center text-white/60 text-sm font-bold">
-                {t.initials}
-              </div>
-              <div>
-                <p className="text-white text-sm font-medium">{t.name}</p>
-                <p className="text-[#777] text-xs">{t.role}</p>
-              </div>
-            </div>
+            Testimonials are intentionally hidden until I have a final set I&apos;m comfortable publishing.
           </motion.div>
-        ))}
-      </div>
+        ) : (
+          <motion.div variants={container} className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+            {testimonials.map((testimonial) => (
+              <motion.article
+                key={testimonial.id}
+                variants={item}
+                className="rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-4 sm:p-6"
+              >
+                <span className="mb-4 block text-4xl leading-none text-[var(--brand-primary)]">“</span>
+                <p className="text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
+                  {testimonial.content}
+                </p>
+                <div className="mt-6">
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">{testimonial.name}</p>
+                  <p className="text-xs text-[var(--text-muted)]">
+                    {testimonial.role} · {testimonial.company}
+                  </p>
+                </div>
+              </motion.article>
+            ))}
+          </motion.div>
+        )}
+      </motion.div>
     </section>
   );
 };
 
 export default Testimonials;
+

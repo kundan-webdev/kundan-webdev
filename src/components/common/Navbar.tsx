@@ -1,237 +1,137 @@
-"use client";
+﻿"use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import { Menu, X, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import Link from "next/link";
+
+import { useActiveSection } from "@/hooks/useActiveSection";
+import { Button } from "@/components/ui/button";
+import { AnimatedThemeToggler } from "@/components/ui/AnimatedThemeToggler";
 
 const navLinks = [
-  { label: "work", href: "#projects" },
-  { label: "about", href: "#about" },
-  { label: "skills", href: "#skills" },
-  { label: "contact", href: "#contact" },
+  { label: "About", href: "#about", id: "about" },
+  { label: "Projects", href: "#projects", id: "projects" },
+  { label: "Experience", href: "#experience", id: "experience" },
+  { label: "Skills", href: "#skills", id: "skills" },
+  { label: "Contact", href: "#contact", id: "contact" },
 ];
 
-const allLinks = [
-  { label: "home", href: "#" },
-  { label: "work", href: "#projects" },
-  { label: "backend", href: "#projects", filter: "backend" },
-  { label: "design", href: "#projects", filter: "design" },
-  { label: "about", href: "#about" },
-  { label: "skills", href: "#skills" },
-  { label: "contact", href: "#contact" },
-];
-
-const Navbar = () => {
+export default function Navbar() {
+  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Scroll progress
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
+  const activeSection = useActiveSection(navLinks.map((link) => link.id));
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 40);
-      if (window.scrollY > 40) setMobileOpen(false);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const openPalette = () =>
-    window.dispatchEvent(new CustomEvent("openCommandPalette"));
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 768) setOpen(false);
+    };
 
-  const handleFilterLink = (filter?: string) => {
-    if (filter) {
-      window.dispatchEvent(
-        new CustomEvent("setProjectFilter", { detail: { filter } }),
-      );
-    }
-    setMobileOpen(false);
-  };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-[100] w-full">
-        <motion.div
-          initial={false}
-          animate={
-            scrolled
-              ? {
-                  backgroundColor: "rgba(8,8,8,0.95)",
-                  paddingTop: "12px",
-                  paddingBottom: "12px",
-                }
-              : {
-                  backgroundColor: "rgba(8,8,8,0)",
-                  paddingTop: "20px",
-                  paddingBottom: "20px",
-                }
-          }
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            backdropFilter: scrolled ? "blur(20px)" : "blur(0px)",
-            WebkitBackdropFilter: scrolled ? "blur(20px)" : "blur(0px)",
-          }}
-          className="w-full relative"
-        >
-          {/* ── Nav content ── */}
-          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-24 flex items-center justify-between">
-            {/* Logo */}
-            <a
-              href="#"
-              className="font-black tracking-tight text-white text-lg hover:text-white/70 transition-colors"
-            >
-              .kundan
-            </a>
+      <header
+        className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "border-b border-[var(--nav-border)] bg-[var(--nav-bg)] backdrop-blur-md"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="mx-auto flex h-16 w-full max-w-[1136px] items-center justify-between px-4 sm:px-6 lg:px-0">
+          <Link href="/" className="text-sm font-semibold text-[var(--text-primary)]">
+            <span className="text-[var(--brand-primary)]">.</span>kundan
+          </Link>
 
-            {/* Desktop Links */}
-            <nav className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
+          <nav className="hidden items-center gap-6 md:flex">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <Link
+                  key={link.href}
                   href={link.href}
-                  className="text-[13px] font-medium text-white/50 hover:text-white px-4 py-2 rounded-full hover:bg-white/[0.05] transition-all duration-200"
+                  className={`text-sm transition-colors ${
+                    isActive
+                      ? "text-[var(--brand-primary)]"
+                      : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  }`}
                 >
                   {link.label}
-                </a>
-              ))}
-            </nav>
+                </Link>
+              );
+            })}
+          </nav>
 
-            {/* Right: ⌘K + Hire Me */}
-            <div className="hidden md:flex items-center gap-2">
-              <button
-                onClick={openPalette}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-white/[0.08] hover:border-orange-500/40 text-white/25 hover:text-orange-500 text-[11px] font-mono transition-all duration-200"
-                title="Command palette (⌘K)"
+          <div className="hidden items-center gap-3 md:flex">
+            <AnimatedThemeToggler />
+            <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-h-[44px] rounded-full border-[var(--border-strong)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               >
-                <Search size={10} />
-                <span>⌘K</span>
-              </button>
-              <a
-                href="#contact"
-                className="px-5 py-2 rounded-full bg-white text-black text-[13px] font-semibold hover:bg-white/90 transition-all duration-200"
-              >
-                hire me
-              </a>
-            </div>
+                Resume <ArrowUpRight size={11} />
+              </Button>
+            </Link>
+          </div>
 
-            {/* Mobile burger */}
+          <div className="flex items-center gap-2 md:hidden">
+            <AnimatedThemeToggler />
             <button
-              className="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-white/[0.08] text-white/60 hover:text-white hover:border-white/20 transition-colors"
-              onClick={() => setMobileOpen((v) => !v)}
+              onClick={() => setOpen((current) => !current)}
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[var(--border-default)] bg-[var(--bg-overlay)] text-[var(--text-secondary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]"
+              aria-label={open ? "Close menu" : "Open menu"}
             >
-              {mobileOpen ? <X size={15} /> : <Menu size={15} />}
+              {open ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
-
-          {/* ── Border bottom / Progress bar ──
-              When not scrolled: subtle static border
-              When scrolled: progress bar replaces border
-          ── */}
-          <div className="absolute bottom-0 left-0 right-0 h-[1px]">
-            {/* Static border — visible only when NOT scrolled */}
-            <motion.div
-              className="absolute inset-0 bg-white/[0]"
-              animate={{ opacity: scrolled ? 0 : 1 }}
-              transition={{ duration: 0.2 }}
-            />
-
-            {/* Progress bar — visible only when scrolled */}
-            <AnimatePresence>
-              {scrolled && (
-                <motion.div
-                  className="absolute inset-0 overflow-hidden"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {/* Track */}
-                  <div className="absolute inset-0 bg-white/[0.05]" />
-                  {/* Fill */}
-                  <motion.div
-                    className="absolute top-0 left-0 bottom-0 origin-left"
-                    style={{
-                      scaleX,
-                      right: 0,
-                      background:
-                        "linear-gradient(90deg, #000000 0%, #C10801 40%, #F16001 85%, #D9C3AB 100%)",
-                    }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </motion.div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="mx-4 mt-2 rounded-2xl overflow-hidden"
-              style={{
-                backgroundColor: "rgba(12,12,12,0.98)",
-                backdropFilter: "blur(20px)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
-              }}
-            >
-              <div className="p-3 grid grid-cols-2 gap-1">
-                {allLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    onClick={() => handleFilterLink(link.filter)}
-                    className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-white/50 hover:text-white hover:bg-white/[0.05] transition-colors"
-                  >
-                    {link.label}
-                    {link.filter && (
-                      <span className="text-[10px] text-orange-500 font-bold ml-auto">
-                        {link.filter}
-                      </span>
-                    )}
-                  </a>
-                ))}
-              </div>
-              <div className="border-t border-white/[0.05] px-3 py-2">
-                <button
-                  onClick={() => {
-                    openPalette();
-                    setMobileOpen(false);
-                  }}
-                  className="w-full flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white/30 hover:text-orange-500 hover:bg-orange-500/5 transition-colors"
-                >
-                  <Search size={13} />
-                  <span>command palette</span>
-                  <kbd className="ml-auto text-[10px] border border-white/[0.08] rounded px-1.5 py-0.5 font-mono">
-                    ⌘K
-                  </kbd>
-                </button>
-              </div>
-              <div className="px-3 pb-3">
-                <a
-                  href="#contact"
-                  onClick={() => setMobileOpen(false)}
-                  className="w-full flex items-center justify-center py-3 rounded-xl bg-white text-black text-sm font-semibold hover:bg-white/90 transition-colors"
-                >
-                  hire me
-                </a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        </div>
       </header>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 flex flex-col bg-[var(--bg-base)] px-6 pt-20"
+          >
+            <nav className="flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="border-b border-[var(--border-default)] py-3 text-2xl font-semibold text-[var(--text-primary)]"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+            <Link
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8"
+              onClick={() => setOpen(false)}
+            >
+              <Button className="w-full rounded-full bg-primary text-white">
+                Download Resume <ArrowUpRight size={14} />
+              </Button>
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
-};
+}
 
-export default Navbar;
