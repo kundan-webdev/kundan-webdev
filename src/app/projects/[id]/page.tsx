@@ -1,10 +1,13 @@
 ﻿import Image from "next/image";
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
+import ProjectActionLinks from "@/components/sections/recent-work/ProjectActionLinks";
+import ProjectNavigation from "@/components/sections/recent-work/ProjectNavigation";
 import { projects } from "@/data/projects";
+
+const disableImageOptimization = process.env.NODE_ENV === "development";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
@@ -28,9 +31,13 @@ export async function generateMetadata({ params }: ProjectPageProps) {
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { id } = await params;
-  const project = projects.find((entry) => entry.id === id);
+  const projectIndex = projects.findIndex((entry) => entry.id === id);
+  const project = projectIndex >= 0 ? projects[projectIndex] : undefined;
 
   if (!project) notFound();
+
+  const previousProject = projectIndex > 0 ? projects[projectIndex - 1] : null;
+  const nextProject = projectIndex < projects.length - 1 ? projects[projectIndex + 1] : null;
 
   return (
     <main className="min-h-screen bg-[var(--bg-base)]">
@@ -45,14 +52,24 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </div>
 
       <div className="mx-auto mb-10 max-w-[1136px] px-4 sm:px-6 lg:px-0">
-        <div className="relative aspect-[16/9] overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)]">
-          <Image src={project.image} alt={project.title} fill priority className="object-cover" />
+        <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)]">
+          <Image
+            src={project.image}
+            alt={project.title}
+            width={1600}
+            height={900}
+            priority
+            unoptimized={disableImageOptimization}
+            sizes="(max-width: 640px) 100vw, (max-width: 1200px) calc(100vw - 3rem), 1136px"
+            quality={70}
+            className="h-auto w-full"
+          />
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-[1136px] grid-cols-1 gap-10 px-4 pb-24 sm:px-6 lg:grid-cols-[1fr_300px] lg:px-0">
+      <div className="mx-auto grid max-w-[1136px] grid-cols-1 gap-10 px-4 pb-12 sm:px-6 lg:grid-cols-[1fr_300px] lg:px-0">
         <div>
-          <div className="mb-6 flex items-start justify-between gap-4">
+          <div className="mb-6">
             <div>
               <span className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--brand-primary)]">
                 {project.status === "live"
@@ -64,22 +81,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <h1 className="mt-1 text-3xl font-bold text-[var(--text-primary)] sm:text-4xl">
                 {project.title}
               </h1>
-            </div>
-            <div className="flex shrink-0 gap-2">
-              {project.githubUrl && (
-                <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
-                  <Button variant="outline" size="icon" className="min-h-[44px] min-w-[44px] rounded-full">
-                    <Github size={16} />
-                  </Button>
-                </Link>
-              )}
-              {project.liveUrl && (
-                <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" aria-label="Live site">
-                  <Button size="icon" className="min-h-[44px] min-w-[44px] rounded-full bg-primary hover:opacity-90">
-                    <ExternalLink size={16} />
-                  </Button>
-                </Link>
-              )}
             </div>
           </div>
 
@@ -95,13 +96,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <ul className="space-y-3">
                 {project.highlights.map((highlight) => (
                   <li key={highlight} className="flex items-start gap-3 text-sm text-[var(--text-secondary)]">
-                    <span className="mt-0.5 text-[var(--brand-primary)]">?</span>
+                    <span className="mt-0.5 text-[var(--brand-primary)]">&rarr;</span>
                     {highlight}
                   </li>
                 ))}
               </ul>
             </div>
           )}
+
         </div>
 
         <aside className="space-y-6">
@@ -129,7 +131,21 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <p className="text-sm text-[var(--text-secondary)]">{project.completedDate}</p>
             </div>
           )}
+
+          <div>
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-[var(--text-muted)]">
+              Project links
+            </p>
+            <ProjectActionLinks project={project} direction="column" showPreview={false} />
+          </div>
         </aside>
+      </div>
+
+      <div className="mx-auto max-w-[1136px] px-4 pb-24 sm:px-6 lg:px-0">
+        <ProjectNavigation
+          previousProject={previousProject}
+          nextProject={nextProject}
+        />
       </div>
     </main>
   );

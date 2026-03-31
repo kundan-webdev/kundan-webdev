@@ -1,9 +1,14 @@
 ﻿"use client";
 
+import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
+import { Marquee } from "@/components/ui/Marquee";
 import { certificates } from "@/data/certificates";
+
+const disableImageOptimization = process.env.NODE_ENV === "development";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -19,10 +24,14 @@ const item: Variants = {
   },
 };
 
-const cardClassName =
-  "group block overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)]";
+const marqueeRows = [certificates, [...certificates].reverse()];
+
+const imageCardClassName =
+  "group relative block w-[280px] shrink-0 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] transition-all duration-300 hover:border-[var(--border-strong)] sm:w-[320px] lg:w-[360px]";
 
 const Certificates = () => {
+  const [isPaused, setIsPaused] = useState(false);
+
   return (
     <section id="certificates" className="py-16 md:py-24">
       <motion.div
@@ -40,71 +49,51 @@ const Certificates = () => {
             Certifications
           </h2>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
-            Professional certifications that reinforce my fundamentals and the way I learn by shipping.
+            A rolling wall of certificates, courses, and learning milestones that
+            shaped how I build products today.
           </p>
         </motion.div>
 
-        <motion.div
-          variants={container}
-          className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4"
-        >
-          {certificates.map((certificate) => (
-            <motion.div key={certificate.id} variants={item}>
-              {certificate.credentialUrl ? (
-                <a
-                  href={certificate.credentialUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cardClassName}
+        <motion.div variants={item} className="space-y-4">
+          {marqueeRows.map((row, rowIndex) => (
+            <Marquee
+              key={rowIndex}
+              reverse={rowIndex === 0}
+              repeat={3}
+              className={`py-1 [--gap:1rem] [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] ${
+                rowIndex === 0 ? "[--duration:26s]" : "[--duration:34s]"
+              } ${isPaused ? "[&>div]:[animation-play-state:paused]" : ""}`}
+            >
+              {row.map((certificate) => (
+                <Link
+                  key={`${rowIndex}-${certificate.id}`}
+                  href={`/certificates/${certificate.id}`}
+                  aria-label={`Open ${certificate.title} certificate`}
+                  className={imageCardClassName}
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => setIsPaused(false)}
+                  onFocus={() => setIsPaused(true)}
+                  onBlur={() => setIsPaused(false)}
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden border-b border-[var(--border-default)]">
-                    {certificate.image ? (
-                      <Image
-                        src={certificate.image}
-                        alt={certificate.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center bg-[var(--bg-elevated)] text-[var(--text-faint)]">
-                        Certificate
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-3 sm:p-4">
-                    <h3 className="text-sm font-semibold leading-snug text-[var(--text-primary)]">
-                      {certificate.title}
-                    </h3>
-                    <p className="mt-2 text-xs text-[var(--brand-primary)]">{certificate.issuer}</p>
-                    <p className="mt-1 text-[11px] text-[var(--text-faint)]">{certificate.issuedDate}</p>
-                  </div>
-                </a>
-              ) : (
-                <div className={cardClassName}>
-                  <div className="relative aspect-[4/3] overflow-hidden border-b border-[var(--border-default)]">
-                    {certificate.image ? (
-                      <Image
-                        src={certificate.image}
-                        alt={certificate.title}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center bg-[var(--bg-elevated)] text-[var(--text-faint)]">
-                        Certificate
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-3 sm:p-4">
-                    <h3 className="text-sm font-semibold leading-snug text-[var(--text-primary)]">
-                      {certificate.title}
-                    </h3>
-                    <p className="mt-2 text-xs text-[var(--brand-primary)]">{certificate.issuer}</p>
-                    <p className="mt-1 text-[11px] text-[var(--text-faint)]">{certificate.issuedDate}</p>
-                  </div>
-                </div>
-              )}
-            </motion.div>
+                  {certificate.image ? (
+                    <Image
+                      src={certificate.image}
+                      alt={certificate.title}
+                      width={1400}
+                      height={1000}
+                      unoptimized={disableImageOptimization}
+                      sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 360px"
+                      quality={70}
+                      className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                  ) : (
+                    <div className="flex min-h-[220px] items-center justify-center bg-[var(--bg-elevated)] text-[var(--text-faint)]">
+                      Certificate
+                    </div>
+                  )}
+                </Link>
+              ))}
+            </Marquee>
           ))}
         </motion.div>
       </motion.div>
@@ -113,4 +102,3 @@ const Certificates = () => {
 };
 
 export default Certificates;
-

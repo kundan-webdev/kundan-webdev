@@ -76,7 +76,7 @@ const Footer = () => {
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-                <Button className="min-h-[44px] rounded-full px-5 py-2.5 text-sm font-semibold">
+                <Button className="min-h-[44px] rounded px-5 py-2.5 text-sm font-semibold">
                   View Resume <ArrowUpRight size={13} />
                 </Button>
               </Link>
@@ -87,7 +87,7 @@ const Footer = () => {
               >
                 <Button
                   variant="outline"
-                  className="min-h-[44px] rounded-full border-[var(--border-default)] px-5 py-2.5 text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  className="min-h-[44px] rounded border-[var(--border-default)] px-5 py-2.5 text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 >
                   LinkedIn <ArrowUpRight size={13} />
                 </Button>

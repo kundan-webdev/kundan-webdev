@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const morphTime = 0.6;
 const cooldownTime = 0.3;
+const LOADING_SCREEN_STORAGE_KEY = "kundan-loading-screen-seen";
 const texts = [
   "Kundan Kumar",
   "Frontend Developer",
@@ -12,7 +13,8 @@ const texts = [
 ];
 
 const LoadingScreen = () => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
   const text1Ref = useRef<HTMLSpanElement>(null);
   const text2Ref = useRef<HTMLSpanElement>(null);
   const textIndexRef = useRef(0);
@@ -63,6 +65,23 @@ const LoadingScreen = () => {
   }, []);
 
   useEffect(() => {
+    const hasSeenLoadingScreen =
+      window.sessionStorage.getItem(LOADING_SCREEN_STORAGE_KEY) === "1";
+
+    if (hasSeenLoadingScreen) return;
+
+    window.sessionStorage.setItem(LOADING_SCREEN_STORAGE_KEY, "1");
+    const frame = window.requestAnimationFrame(() => {
+      setVisible(true);
+      setShouldAnimate(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldAnimate) return;
+
     timeRef.current = Date.now();
 
     const animate = () => {
@@ -87,7 +106,7 @@ const LoadingScreen = () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       clearTimeout(timer);
     };
-  }, [doMorph, doCooldown]);
+  }, [doMorph, doCooldown, shouldAnimate]);
 
   return (
     <AnimatePresence>

@@ -39,14 +39,14 @@ const FounderBanner = () => {
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link href="https://devxclub.com" target="_blank" rel="noopener noreferrer">
-                <Button className="min-h-[44px] rounded-full px-6 py-3 text-sm font-semibold">
+                <Button className="min-h-[44px] rounded px-6 py-3 text-sm font-semibold">
                   Visit devxclub.com <ArrowUpRight size={14} />
                 </Button>
               </Link>
               <Link href="#projects">
                 <Button
                   variant="outline"
-                  className="min-h-[44px] rounded-full border-white/15 px-6 py-3 text-sm font-semibold text-white/80 hover:bg-white/5 hover:text-white"
+                  className="min-h-[44px] rounded border-white/15 px-6 py-3 text-sm font-semibold text-white/80 hover:bg-white/5 hover:text-white"
                 >
                   See project work
                 </Button>

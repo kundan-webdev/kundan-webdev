@@ -59,30 +59,39 @@ const RevealWord = ({
   );
 };
 
-const RevealParagraph = ({ text, index }: { text: string; index: number }) => {
-  const ref = useRef<HTMLDivElement>(null);
+const RevealParagraph = ({
+  text,
+  index,
+  progress,
+  total,
+}: {
+  text: string;
+  index: number;
+  progress: MotionValue<number>;
+  total: number;
+}) => {
   const words = text.split(" ");
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.9", "end 0.2"],
-  });
+  const paragraphBand = 1 / total;
+  const paragraphStart = index * paragraphBand;
+  const paragraphEnd = paragraphStart + paragraphBand * 0.92;
+  const paragraphRange = paragraphEnd - paragraphStart;
 
   return (
-    <div ref={ref} className="border-b border-[var(--border-default)] py-10 last:border-0 md:py-14">
+    <div className="border-b border-[var(--border-default)] py-10 last:border-0 md:py-14">
       <span className="mb-4 block text-[11px] font-mono tracking-[0.24em] text-[var(--brand-primary)]/60">
         {String(index + 1).padStart(2, "0")}
       </span>
       <p className="flex flex-wrap gap-y-1 text-lg font-medium leading-[1.7] text-[var(--text-primary)] md:text-[1.35rem]">
         {words.map((word, wordIndex) => {
-          const band = 1 / words.length;
-          const wordStart = wordIndex * band;
-          const wordEnd = wordStart + band * 1.3;
+          const wordBand = paragraphRange / words.length;
+          const wordStart = paragraphStart + wordIndex * wordBand;
+          const wordEnd = wordStart + wordBand * 1.25;
           return (
             <RevealWord
               key={`${word}-${wordIndex}`}
               word={word}
-              progress={scrollYProgress}
-              start={Math.min(wordStart, 0.9)}
+              progress={progress}
+              start={Math.min(wordStart, 0.96)}
               end={Math.min(wordEnd, 1)}
             />
           );
@@ -93,6 +102,12 @@ const RevealParagraph = ({ text, index }: { text: string; index: number }) => {
 };
 
 const About = () => {
+  const textRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: textRef,
+    offset: ["start 0.82", "end 0.18"],
+  });
+
   return (
     <section id="about" className="py-16 md:py-24">
       <motion.div
@@ -111,15 +126,21 @@ const About = () => {
           </h2>
         </motion.div>
 
-        <div className="flex flex-col gap-12 lg:flex-row lg:gap-20">
-          <div className="min-w-0 flex-1">
+        <div className="flex flex-col gap-12 lg:items-start lg:flex-row lg:gap-20">
+          <div ref={textRef} className="min-w-0 flex-1">
             {paragraphs.map((text, index) => (
-              <RevealParagraph key={index} text={text} index={index} />
+              <RevealParagraph
+                key={index}
+                text={text}
+                index={index}
+                progress={scrollYProgress}
+                total={paragraphs.length}
+              />
             ))}
           </div>
 
-          <motion.aside variants={itemVariants} className="w-full shrink-0 lg:w-[280px] lg:sticky lg:top-28">
-            <div className="space-y-8 rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-4 sm:p-6">
+          <aside className="w-full shrink-0 lg:sticky lg:top-28 lg:w-[280px] lg:self-start">
+            <div className="h-fit space-y-8 rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-4 sm:p-6">
               <div className="grid grid-cols-2 gap-4">
                 {stats.map((stat) => (
                   <div key={stat.label}>
@@ -141,7 +162,7 @@ const About = () => {
                 Available for new opportunities
               </div>
             </div>
-          </motion.aside>
+          </aside>
         </div>
       </motion.div>
     </section>

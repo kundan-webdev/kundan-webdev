@@ -1,12 +1,12 @@
 ﻿"use client";
 
 import { motion, type Variants } from "framer-motion";
-import Link from "next/link";
 
 import { Badge } from "@/components/atoms";
 import type { Project } from "@/data/projects";
 
 import ProjectCard from "./ProjectCard";
+import ProjectRouteLink from "./ProjectRouteLink";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -36,13 +36,13 @@ const ProjectGrid = ({ projects }: { projects: Project[] }) => {
     >
       {projects.map((project) => (
         <motion.div key={project.id} variants={item} className="h-full">
-          <Link href={`/projects/${project.id}`} className="block h-full">
+          <ProjectRouteLink href={`/projects/${project.id}`} className="block h-full">
             <ProjectCard project={project} className="h-full" />
             <div className="mt-3 flex items-center justify-between gap-3">
               <Badge text={project.status === "live" ? "Live" : project.status === "wip" ? "In progress" : "Archived"} />
               <span className="text-xs text-[var(--text-faint)]">{project.year}</span>
             </div>
-          </Link>
+          </ProjectRouteLink>
         </motion.div>
       ))}
     </motion.div>

@@ -3,7 +3,7 @@
 import { motion, type Variants } from "framer-motion";
 
 import { Avatar } from "@/components/atoms";
-import { AvailabilityBadge, CTAGroup, SubInfoRow } from "@/components/molecules";
+import { AvailabilityBadge, CTAGroup } from "@/components/molecules";
 import { TypingAnimation } from "@/components/ui/TypingAnimation";
 
 const titles = [
@@ -42,7 +42,7 @@ const avatarSpring: Variants = {
 export default function HeroContent() {
   return (
     <motion.div
-      className="mx-auto max-w-[1136px] px-4 pb-16 pt-24 sm:px-6 md:pb-24 md:pt-32 lg:px-0"
+      className="mx-auto max-w-[1136px] px-4 py-12 sm:px-6 md:py-20 lg:px-0"
       variants={container}
       initial="hidden"
       animate="show"
@@ -51,27 +51,21 @@ export default function HeroContent() {
         <AvailabilityBadge />
       </motion.div>
 
-      <div className="mb-6 md:mb-8">
-        <motion.div
-          variants={item}
-          className="flex flex-wrap items-center gap-2 text-[clamp(2.4rem,7vw,6rem)] font-bold leading-[1.05] tracking-[-0.04em] text-[var(--text-primary)] md:gap-3"
-        >
+      <motion.div variants={item} className="max-w-full">
+        <div className="flex flex-wrap items-center gap-2.5 text-[clamp(2rem,5.4vw,5.4rem)] font-bold leading-[0.98] tracking-[-0.05em] text-[var(--text-primary)] md:gap-4">
           <span>Hey, I&apos;m</span>
           <motion.span variants={avatarSpring} className="inline-block">
             <Avatar
-              width={90}
-              height={55}
-              className="md:h-[65px] md:w-[110px]"
+              width={104}
+              height={62}
+              className="md:h-[74px] md:w-[128px]"
               priority
             />
           </motion.span>
           <span>Kundan</span>
-        </motion.div>
+        </div>
 
-        <motion.div
-          variants={item}
-          className="mt-1 flex flex-wrap items-baseline gap-2 text-[clamp(1.8rem,5vw,5.5rem)] font-bold leading-[1.05] tracking-[-0.04em] md:gap-3"
-        >
+        <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1.5 text-[clamp(2rem,5.4vw,5.4rem)] font-bold leading-[1.02] tracking-[-0.05em] md:mt-2 md:gap-x-4">
           <span className="text-[var(--text-muted)]">I build</span>
           <TypingAnimation
             words={titles}
@@ -82,34 +76,31 @@ export default function HeroContent() {
             delay={800}
             startOnView={false}
             cursorStyle="line"
-            className="bg-clip-text text-transparent bg-[linear-gradient(-145deg,#FF923C_0%,#E66123_40%,#FB3800_100%)] font-bold"
+            className="min-h-[1.1em] bg-[linear-gradient(-145deg,#FF923C_0%,#E66123_40%,#FB3800_100%)] bg-clip-text font-bold text-transparent"
           />
-        </motion.div>
+        </div>
+      </motion.div>
 
-        <motion.div variants={item} className="mt-4 md:mt-5">
-          <p className="text-sm font-medium tracking-wide text-[var(--text-muted)] md:text-base">
+      <motion.div variants={item} className="mt-8 lg:mt-10">
+        <div className="max-w-[640px]">
+          <p className="text-sm font-medium tracking-[0.02em] text-[var(--text-muted)] md:text-base">
             Full-Stack Developer · MERN · Next.js · TypeScript
           </p>
-          <p className="mt-3 max-w-lg text-sm leading-relaxed text-[var(--text-secondary)] md:text-[1.05rem]">
+          <p className="mt-4 text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
             I turn ideas into production-ready products — from database schema
             to pixel-perfect UI. Currently building{" "}
             <span className="text-[var(--brand-secondary)]">DevXClub</span>,
             a developer community for 1000+ Indian CS students.
           </p>
-          <p className="mt-2 text-xs text-[var(--text-faint)] md:mt-3 md:text-sm">
+          <p className="mt-4 text-sm text-[var(--text-faint)] md:text-base">
             India-based · Open to remote &amp; hybrid roles
           </p>
-        </motion.div>
-      </div>
-
-      <motion.div variants={item} className="mb-8 md:mb-10">
-        <SubInfoRow />
+        </div>
       </motion.div>
 
-      <motion.div variants={item}>
+      <motion.div variants={item} className="mt-8 md:mt-10">
         <CTAGroup />
       </motion.div>
     </motion.div>
   );
 }
-

@@ -1,12 +1,6 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 
-import CommandPalette from "@/components/common/CommandPalette";
-import CustomCursor from "@/components/common/CustomCursor";
-import { GlobalGrid } from "@/components/common/GlobalGrid";
-import LoadingScreen from "@/components/common/LoadingScreen";
-import Navbar from "@/components/common/Navbar";
-import ScrollProgress from "@/components/common/ScrollProgress";
-import SmoothScrolling from "@/components/common/SmoothScrolling";
+import AppShell from "@/components/common/AppShell";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 
 import "./globals.css";
@@ -67,20 +61,9 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange={false}
         >
-          <LoadingScreen />
-          <ScrollProgress />
-          <CustomCursor />
-          <SmoothScrolling>
-            <GlobalGrid />
-            <div className="relative z-10 min-h-screen bg-background text-foreground">
-              <Navbar />
-              <CommandPalette />
-              {children}
-            </div>
-          </SmoothScrolling>
+          <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>
     </html>
   );
 }
-

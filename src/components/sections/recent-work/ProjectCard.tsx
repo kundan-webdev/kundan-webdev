@@ -4,6 +4,8 @@ import { ProjectMeta } from "@/components/molecules";
 import type { Project } from "@/data/projects";
 import { cn } from "@/lib/utils";
 
+const disableImageOptimization = process.env.NODE_ENV === "development";
+
 interface ProjectCardProps {
   project: Project;
   className?: string;
@@ -17,12 +19,16 @@ const ProjectCard = ({ project, className }: ProjectCardProps) => {
         className,
       )}
     >
-      <div className="relative aspect-[16/10] overflow-hidden border-b border-[var(--border-default)]">
+      <div className="relative overflow-hidden border-b border-[var(--border-default)]">
         <Image
           src={project.image}
           alt={project.title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          width={1600}
+          height={1000}
+          unoptimized={disableImageOptimization}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 360px"
+          quality={70}
+          className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.03]"
         />
       </div>
       <div className="p-4 sm:p-6">

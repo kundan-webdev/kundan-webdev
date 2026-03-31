@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import { ActivityCalendar } from "react-activity-calendar";
 import { motion, type Variants } from "framer-motion";
-import { BookMarked, GitCommitHorizontal, GitPullRequest, Star } from "lucide-react";
+import {
+  BookMarked,
+  GitCommitHorizontal,
+  GitPullRequest,
+  Star,
+} from "lucide-react";
 
 const sectionVariants: Variants = {
   hidden: { opacity: 0 },
@@ -22,7 +27,9 @@ const itemVariants: Variants = {
 const Activity = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const [data, setData] = useState<{ date: string; count: number; level: 0 | 1 | 2 | 3 | 4 }[]>([]);
+  const [data, setData] = useState<
+    { date: string; count: number; level: 0 | 1 | 2 | 3 | 4 }[]
+  >([]);
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
@@ -36,11 +43,14 @@ const Activity = () => {
 
     const fetchGitHubData = async () => {
       try {
-        const response = await fetch("https://github-contributions-api.jogruber.de/v4/kundan-webdev?y=last");
+        const response = await fetch(
+          "https://github-contributions-api.jogruber.de/v4/kundan-webdev?y=last",
+        );
         if (!response.ok) throw new Error("Failed to fetch");
         const apiData = await response.json();
         const contributions = apiData?.contributions;
-        if (!Array.isArray(contributions)) throw new Error("Invalid data format");
+        if (!Array.isArray(contributions))
+          throw new Error("Invalid data format");
 
         setData(
           contributions.map((day: { date: string; count: number }) => ({
@@ -50,7 +60,10 @@ const Activity = () => {
           })),
         );
         setTotalCount(
-          contributions.reduce((sum: number, day: { count: number }) => sum + day.count, 0),
+          contributions.reduce(
+            (sum: number, day: { count: number }) => sum + day.count,
+            0,
+          ),
         );
         setIsLoading(false);
       } catch {
@@ -63,7 +76,11 @@ const Activity = () => {
   }, []);
 
   const stats = [
-    { icon: GitCommitHorizontal, value: isLoading ? "-" : `${totalCount}`, label: "Contributions" },
+    {
+      icon: GitCommitHorizontal,
+      value: isLoading ? "-" : `${totalCount}`,
+      label: "Contributions",
+    },
     { icon: BookMarked, value: "12", label: "Public Repos" },
     { icon: GitPullRequest, value: "24", label: "PRs Merged" },
     { icon: Star, value: "8", label: "Stars Earned" },
@@ -86,11 +103,15 @@ const Activity = () => {
             Consistent Contribution
           </h2>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
-            A view into the rhythm behind the portfolio — shipping, iterating, and learning in public through real product work.
+            A view into the rhythm behind the portfolio — shipping, iterating,
+            and learning in public through real product work.
           </p>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="mb-6 flex flex-wrap gap-4 md:gap-6">
+        <motion.div
+          variants={itemVariants}
+          className="mb-6 flex flex-wrap gap-4 md:gap-6"
+        >
           {stats.map((stat) => (
             <div
               key={stat.label}
@@ -100,18 +121,26 @@ const Activity = () => {
                 <stat.icon size={16} />
               </div>
               <div>
-                <p className="text-lg font-semibold text-[var(--text-primary)]">{stat.value}</p>
+                <p className="text-lg font-semibold text-[var(--text-primary)]">
+                  {stat.value}
+                </p>
                 <p className="text-xs text-[var(--text-faint)]">{stat.label}</p>
               </div>
             </div>
           ))}
         </motion.div>
 
-        <motion.div variants={itemVariants} className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-4 sm:p-6">
-          {isLoading && <div className="h-[220px] animate-pulse rounded-[var(--radius-lg)] bg-[var(--bg-elevated)]" />}
+        <motion.div
+          variants={itemVariants}
+          className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-4 sm:p-6"
+        >
+          {isLoading && (
+            <div className="h-[220px] animate-pulse rounded-[var(--radius-lg)] bg-[var(--bg-elevated)]" />
+          )}
           {hasError && !isLoading && (
             <div className="flex h-[220px] items-center justify-center text-center text-sm text-[var(--text-secondary)]">
-              Unable to load the activity calendar right now. Check my GitHub profile directly.
+              Unable to load the activity calendar right now. Check my GitHub
+              profile directly.
             </div>
           )}
           {!isLoading && !hasError && data.length > 0 && (
@@ -119,16 +148,28 @@ const Activity = () => {
               <ActivityCalendar
                 data={data}
                 colorScheme="dark"
-                blockSize={12}
-                blockMargin={3}
-                blockRadius={3}
-                fontSize={12}
+                blockSize={15}
+                blockMargin={4}
+                blockRadius={1}
+                fontSize={14}
                 showWeekdayLabels
-                weekStart={1}
-                showMonthLabels={false}
+                weekStart={0}
+                showMonthLabels={true}
                 theme={{
-                  light: ["#ede7de", "#ffd7ba", "#ffb27e", "#f16001", "#df3405"],
-                  dark: ["rgba(255,255,255,0.03)", "rgba(241,96,1,0.28)", "rgba(241,96,1,0.45)", "rgba(241,96,1,0.72)", "rgba(223,52,5,1)"],
+                  light: [
+                    "#ede7de",
+                    "#ffd7ba",
+                    "#ffb27e",
+                    "#f16001",
+                    "#df3405",
+                  ],
+                  dark: [
+                    "rgba(255,255,255,0.03)",
+                    "rgba(241,96,1,0.28)",
+                    "rgba(241,96,1,0.45)",
+                    "rgba(241,96,1,0.72)",
+                    "rgba(223,52,5,1)",
+                  ],
                 }}
                 labels={{
                   legend: { less: "Less", more: "More" },
@@ -144,4 +185,3 @@ const Activity = () => {
 };
 
 export default Activity;
-

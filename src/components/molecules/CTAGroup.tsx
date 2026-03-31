@@ -11,43 +11,87 @@ interface CTAGroupProps {
   className?: string;
 }
 
+interface CTAItem {
+  href: string;
+  label: string;
+  ariaLabel: string;
+  variant?: "default" | "outline";
+  external?: boolean;
+  accentClassName: string;
+  icon?: React.ReactNode;
+}
+
 export function CTAGroup({
   projectsHref = "#projects",
   contactHref = "#contact",
   resumeHref = "/resume.pdf",
   className,
 }: CTAGroupProps) {
+  const items: CTAItem[] = [
+    {
+      href: projectsHref,
+      label: "View Work",
+      ariaLabel: "View my projects",
+      variant: "default",
+      accentClassName:
+        "bg-white text-black shadow-[0_14px_40px_rgba(255,255,255,0.16)] hover:bg-white/90",
+    },
+    {
+      href: contactHref,
+      label: "Contact Me",
+      ariaLabel: "Contact me",
+      variant: "outline",
+      accentClassName:
+        "border-orange-500/30 bg-transparent text-orange-400 hover:border-orange-500/60 hover:bg-orange-500/5",
+    },
+    {
+      href: resumeHref,
+      label: "Resume",
+      ariaLabel: "Open resume",
+      variant: "outline",
+      external: true,
+      accentClassName:
+        "border-[var(--border-default)] bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
+      icon: (
+        <ArrowUpRight
+          size={13}
+          className="transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
+        />
+      ),
+    },
+  ];
+
   return (
-    <div className={cn("flex flex-wrap gap-3", className)}>
-      <Link href={projectsHref} aria-label="View my projects">
-        <Button className="min-h-[44px] rounded-full bg-white px-7 py-5 text-sm font-semibold text-black hover:bg-white/90">
-          View Work
-        </Button>
-      </Link>
-      <Link href={contactHref} aria-label="Contact me">
+    <div
+      className={cn(
+        "flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center",
+        className,
+      )}
+    >
+      {items.map((item) => (
         <Button
-          variant="outline"
-          className="min-h-[44px] rounded-full border-orange-500/30 bg-transparent px-7 py-5 text-sm font-semibold text-orange-400 hover:border-orange-500/60 hover:bg-orange-500/5"
+          key={item.label}
+          render={
+            <Link
+              href={item.href}
+              aria-label={item.ariaLabel}
+              target={item.external ? "_blank" : undefined}
+              rel={item.external ? "noopener noreferrer" : undefined}
+            />
+          }
+          nativeButton={false}
+          variant={item.variant}
+          className={cn(
+            "group/cta min-h-12 w-full justify-center rounded-full px-6 py-3 text-sm font-semibold sm:w-auto sm:min-w-[148px]",
+            item.accentClassName,
+          )}
         >
-          Contact Me
+          <span>{item.label}</span>
+          {item.icon ?? null}
         </Button>
-      </Link>
-      <Link
-        href={resumeHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Open resume"
-      >
-        <Button
-          variant="outline"
-          className="min-h-[44px] rounded-full border-[var(--border-default)] bg-transparent px-7 py-5 text-sm font-semibold text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
-        >
-          Resume <ArrowUpRight size={13} />
-        </Button>
-      </Link>
+      ))}
     </div>
   );
 }
 
 export default CTAGroup;
-

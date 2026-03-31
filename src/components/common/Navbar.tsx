@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 
@@ -11,16 +11,23 @@ import { AnimatedThemeToggler } from "@/components/ui/AnimatedThemeToggler";
 
 const navLinks = [
   { label: "About", href: "#about", id: "about" },
+  { label: "Skills", href: "#skills", id: "skills" },
   { label: "Projects", href: "#projects", id: "projects" },
   { label: "Experience", href: "#experience", id: "experience" },
-  { label: "Skills", href: "#skills", id: "skills" },
   { label: "Contact", href: "#contact", id: "contact" },
 ];
+const navSectionIds = navLinks.map((link) => link.id);
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const activeSection = useActiveSection(navLinks.map((link) => link.id));
+  const activeSection = useActiveSection(navSectionIds);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -40,11 +47,11 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
           scrolled
-            ? "border-b border-[var(--nav-border)] bg-[var(--nav-bg)] backdrop-blur-md"
+            ? "bg-[var(--nav-bg)] backdrop-blur-md"
             : "bg-transparent"
-        }`}
+        } relative`}
       >
         <div className="mx-auto flex h-16 w-full max-w-[1136px] items-center justify-between px-4 sm:px-6 lg:px-0">
           <Link href="/" className="text-sm font-semibold text-[var(--text-primary)]">
@@ -58,6 +65,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={isActive ? "location" : undefined}
                   className={`text-sm transition-colors ${
                     isActive
                       ? "text-[var(--brand-primary)]"
@@ -94,6 +102,36 @@ export default function Navbar() {
             </button>
           </div>
         </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-px">
+          <motion.div
+            className="absolute inset-0 bg-[var(--nav-border)]"
+            animate={{ opacity: scrolled ? 0 : 1 }}
+            transition={{ duration: 0.2 }}
+          />
+
+          <AnimatePresence>
+            {scrolled && (
+              <motion.div
+                className="absolute inset-0 overflow-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="absolute inset-0 bg-white/[0.05]" />
+                <motion.div
+                  className="absolute bottom-0 left-0 top-0 origin-left"
+                  style={{
+                    scaleX,
+                    right: 0,
+                    background: "var(--gradient-brand)",
+                  }}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </header>
 
       <AnimatePresence>
@@ -106,16 +144,24 @@ export default function Navbar() {
             className="fixed inset-0 z-40 flex flex-col bg-[var(--bg-base)] px-6 pt-20"
           >
             <nav className="flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="border-b border-[var(--border-default)] py-3 text-2xl font-semibold text-[var(--text-primary)]"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    aria-current={isActive ? "location" : undefined}
+                    className={`border-b border-[var(--border-default)] py-3 text-2xl font-semibold transition-colors ${
+                      isActive
+                        ? "text-[var(--brand-primary)]"
+                        : "text-[var(--text-primary)]"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </nav>
             <Link
               href="/resume.pdf"

@@ -1,13 +1,16 @@
-﻿"use client";
+"use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 import { ProjectMeta } from "@/components/molecules";
 import { projects, type ProjectCategory } from "@/data/projects";
+
+import ProjectActionLinks from "./ProjectActionLinks";
+import ProjectRouteLink from "./ProjectRouteLink";
+
+const disableImageOptimization = process.env.NODE_ENV === "development";
 
 const filters: { id: ProjectCategory; label: string }[] = [
   { id: "all", label: "All" },
@@ -32,18 +35,6 @@ const itemVariants: Variants = {
 
 const RecentWork = () => {
   const [activeFilter, setActiveFilter] = useState<ProjectCategory>("all");
-
-  useEffect(() => {
-    const handler = (event: Event) => {
-      const detail = (event as CustomEvent<{ filter?: ProjectCategory }>).detail;
-      if (!detail?.filter) return;
-      setActiveFilter(detail.filter);
-      document.getElementById("projects")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-
-    window.addEventListener("setProjectFilter", handler);
-    return () => window.removeEventListener("setProjectFilter", handler);
-  }, []);
 
   const filteredProjects = projects.filter((project) => project.categories.includes(activeFilter));
   const featuredProject = filteredProjects.find((project) => project.featured) ?? null;
@@ -95,36 +86,52 @@ const RecentWork = () => {
         </motion.div>
 
         <AnimatePresence mode="wait">
-          <motion.div key={activeFilter} variants={sectionVariants} initial="hidden" animate="show" exit={{ opacity: 0 }}>
+          <motion.div
+            key={activeFilter}
+            variants={sectionVariants}
+            initial="hidden"
+            animate="show"
+            exit={{ opacity: 0 }}
+          >
             {featuredProject && (
               <motion.div variants={itemVariants} className="mb-6">
-                <Link href={`/projects/${featuredProject.id}`} className="group block overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] transition-all duration-300 hover:border-[var(--border-strong)]">
-                  <div className="relative aspect-[16/9] overflow-hidden border-b border-[var(--border-default)]">
-                    <Image
-                      src={featuredProject.image}
-                      alt={featuredProject.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-5 p-4 sm:p-6 md:flex-row md:items-end md:justify-between">
+                <article className="group overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)] transition-all duration-300 hover:border-[var(--border-strong)]">
+                  <ProjectRouteLink href={`/projects/${featuredProject.id}`} className="block">
+                    <div className="relative overflow-hidden">
+                      <Image
+                        src={featuredProject.image}
+                        alt={featuredProject.title}
+                        width={1600}
+                        height={900}
+                        unoptimized={disableImageOptimization}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1200px) calc(100vw - 3rem), 1136px"
+                        quality={70}
+                        className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,rgba(8,8,8,0)_0%,rgba(8,8,8,0.08)_36%,var(--bg-surface)_100%)] sm:h-36" />
+                    </div>
+                  </ProjectRouteLink>
+                  <div className="relative z-10 -mt-8 flex flex-col gap-5 bg-[linear-gradient(180deg,rgba(12,12,12,0)_0%,rgba(12,12,12,0.72)_18%,var(--bg-surface)_42%,var(--bg-surface)_100%)] p-4 pt-10 sm:-mt-10 sm:p-6 sm:pt-12 md:flex-row md:items-end md:justify-between">
                     <div>
                       <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
                         Featured
                       </span>
-                      <h3 className="text-2xl font-semibold text-[var(--text-primary)] md:text-3xl">
-                        {featuredProject.title}
-                      </h3>
+                      <ProjectRouteLink href={`/projects/${featuredProject.id}`} className="inline-block">
+                        <h3 className="text-2xl font-semibold text-[var(--text-primary)] transition-colors hover:text-[var(--brand-primary)] md:text-3xl">
+                          {featuredProject.title}
+                        </h3>
+                      </ProjectRouteLink>
                       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
                         {featuredProject.shortDesc}
                       </p>
                       <ProjectMeta stack={featuredProject.stack} className="mt-4" />
                     </div>
-                    <span className="inline-flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)] transition-colors group-hover:text-[var(--text-primary)]">
-                      View project <ArrowUpRight size={14} />
-                    </span>
+                    <ProjectActionLinks
+                      project={featuredProject}
+                      detailHref={`/projects/${featuredProject.id}`}
+                    />
                   </div>
-                </Link>
+                </article>
               </motion.div>
             )}
 
@@ -132,32 +139,35 @@ const RecentWork = () => {
               {restProjects.length > 0 && <div className="border-t border-[var(--border-default)]" />}
               {restProjects.map((project) => (
                 <motion.div key={project.id} variants={itemVariants}>
-                  <Link
-                    href={`/projects/${project.id}`}
-                    className="group flex flex-col gap-3 border-b border-[var(--border-default)] py-5 transition-all hover:px-1 md:flex-row md:items-center md:justify-between"
-                  >
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-3">
-                        <span className="w-10 shrink-0 text-xs text-[var(--text-faint)]">
-                          {project.year}
-                        </span>
-                        <h3 className="text-lg font-semibold text-[var(--text-primary)] transition-colors group-hover:text-[var(--brand-primary)]">
-                          {project.title}
-                        </h3>
+                  <article className="group border-b border-[var(--border-default)] py-5 transition-all hover:px-1">
+                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-3">
+                          <span className="w-10 shrink-0 text-xs text-[var(--text-faint)]">
+                            {project.year}
+                          </span>
+                          <ProjectRouteLink href={`/projects/${project.id}`} className="inline-block">
+                            <h3 className="text-lg font-semibold text-[var(--text-primary)] transition-colors hover:text-[var(--brand-primary)]">
+                              {project.title}
+                            </h3>
+                          </ProjectRouteLink>
+                        </div>
+                        <p className="mt-2 max-w-xl text-sm leading-relaxed text-[var(--text-secondary)] sm:pl-[3.25rem] md:pl-0">
+                          {project.shortDesc}
+                        </p>
                       </div>
-                      <p className="mt-2 max-w-xl text-sm leading-relaxed text-[var(--text-secondary)] sm:pl-[3.25rem] md:pl-0">
-                        {project.shortDesc}
-                      </p>
+                      <div className="flex flex-col items-start gap-3 md:items-end">
+                        <span className="hidden text-xs font-medium uppercase tracking-wide text-[var(--text-muted)] sm:block">
+                          {project.label}
+                        </span>
+                        <ProjectActionLinks
+                          project={project}
+                          detailHref={`/projects/${project.id}`}
+                          compact
+                        />
+                      </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <span className="hidden text-xs font-medium uppercase tracking-wide text-[var(--text-muted)] sm:block">
-                        {project.label}
-                      </span>
-                      <span className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[var(--border-default)] text-[var(--text-secondary)] transition-all group-hover:border-[var(--border-strong)] group-hover:text-[var(--text-primary)]">
-                        <ArrowUpRight size={14} />
-                      </span>
-                    </div>
-                  </Link>
+                  </article>
                 </motion.div>
               ))}
 
@@ -175,4 +185,3 @@ const RecentWork = () => {
 };
 
 export default RecentWork;
-
