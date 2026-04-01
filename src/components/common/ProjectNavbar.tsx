@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button";
 
 export default function ProjectNavbar() {
   const [scrolled, setScrolled] = useState(false);
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
+    stiffness: 120,
     damping: 30,
-    restDelta: 0.001,
   });
 
   useEffect(() => {
@@ -25,12 +25,13 @@ export default function ProjectNavbar() {
   return (
     <header className="sticky top-0 z-50 w-full bg-[var(--nav-bg)] backdrop-blur-md">
       <div className="relative">
-        <div className="mx-auto flex h-16 w-full max-w-[1136px] items-center justify-between px-4 sm:px-6 lg:px-0">
+        <div className="mx-auto flex h-16 max-w-[1136px] items-center justify-between px-4 sm:px-6 lg:px-0">
           <Link href="/" className="text-sm font-semibold text-[var(--text-primary)]">
             <span className="text-[var(--brand-primary)]">.</span>kundan
           </Link>
 
-          <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+          {/* ❌ NO magnetic here */}
+          <Link href="/resume.pdf" target="_blank">
             <Button
               variant="outline"
               size="sm"
@@ -41,11 +42,11 @@ export default function ProjectNavbar() {
           </Link>
         </div>
 
+        {/* progress line */}
         <div className="absolute bottom-0 left-0 right-0 h-px">
           <motion.div
             className="absolute inset-0 bg-[var(--nav-border)]"
             animate={{ opacity: scrolled ? 0 : 1 }}
-            transition={{ duration: 0.2 }}
           />
 
           <AnimatePresence>
@@ -55,14 +56,12 @@ export default function ProjectNavbar() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
               >
                 <div className="absolute inset-0 bg-white/[0.05]" />
                 <motion.div
-                  className="absolute bottom-0 left-0 top-0 origin-left"
+                  className="absolute inset-y-0 left-0 origin-left"
                   style={{
                     scaleX,
-                    right: 0,
                     background: "var(--gradient-brand)",
                   }}
                 />

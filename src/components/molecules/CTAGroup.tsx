@@ -1,4 +1,6 @@
-﻿import Link from "next/link";
+﻿"use client";
+
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -19,6 +21,7 @@ interface CTAItem {
   external?: boolean;
   accentClassName: string;
   icon?: React.ReactNode;
+  magnetic?: boolean; // 👈 control interaction
 }
 
 export function CTAGroup({
@@ -33,6 +36,7 @@ export function CTAGroup({
       label: "View Work",
       ariaLabel: "View my projects",
       variant: "default",
+      magnetic: true, // ✅ ONLY primary CTA gets magnetic
       accentClassName:
         "bg-white text-black shadow-[0_14px_40px_rgba(255,255,255,0.16)] hover:bg-white/90",
     },
@@ -65,12 +69,13 @@ export function CTAGroup({
     <div
       className={cn(
         "flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center",
-        className,
+        className
       )}
     >
       {items.map((item) => (
         <Button
           key={item.label}
+          magnetic={item.magnetic} // ✅ controlled usage
           render={
             <Link
               href={item.href}
@@ -83,7 +88,7 @@ export function CTAGroup({
           variant={item.variant}
           className={cn(
             "group/cta min-h-12 w-full justify-center rounded-full px-6 py-3 text-sm font-semibold sm:w-auto sm:min-w-[148px]",
-            item.accentClassName,
+            item.accentClassName
           )}
         >
           <span>{item.label}</span>

@@ -1,121 +1,139 @@
 ﻿"use client";
 
-import { type PointerEvent, useEffect, useRef } from "react";
-import { gsap } from "gsap";
-
+import { useEffect, useRef, type PointerEvent } from "react";
 import { cn } from "@/lib/utils";
 
 interface DividerProps {
   className?: string;
 }
 
-const VIEWBOX_WIDTH = 100;
-const VIEWBOX_HEIGHT = 40;
-const BASELINE_Y = 20;
-const DEFAULT_CONTROL_X = VIEWBOX_WIDTH / 2;
-const MIN_CONTROL_X = 18;
-const MAX_CONTROL_X = 82;
+const WIDTH = 100;
+const HEIGHT =50;
+const BASELINE = 20;
+const POINTS = 10; // number of control points
 const MAX_BEND = 14;
 
 export function Divider({ className }: DividerProps) {
   const pathRef = useRef<SVGPathElement>(null);
-  const curveRef = useRef({ controlX: DEFAULT_CONTROL_X, bend: 0 });
-  const reduceMotionRef = useRef(false);
-  const controlXToRef = useRef<((value: number) => void) | null>(null);
-  const bendToRef = useRef<((value: number) => void) | null>(null);
 
-  const drawPath = () => {
-    pathRef.current?.setAttribute(
-      "d",
-      `M 0 ${BASELINE_Y} Q ${curveRef.current.controlX} ${BASELINE_Y + curveRef.current.bend} ${VIEWBOX_WIDTH} ${BASELINE_Y}`,
-    );
+  const pointsRef = useRef(
+    Array.from({ length: POINTS }, (_, i) => ({
+      x: (i / (POINTS - 1)) * WIDTH,
+      y: BASELINE,
+      vy: 0,
+    }))
+  );
+
+  const pointerRef = useRef({ x: WIDTH / 2, y: BASELINE, active: false });
+
+  const draw = () => {
+    const pts = pointsRef.current;
+
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+
+    for (let i = 1; i < pts.length - 1; i++) {
+      const xc = (pts[i].x + pts[i + 1].x) / 2;
+      const yc = (pts[i].y + pts[i + 1].y) / 2;
+      d += ` Q ${pts[i].x} ${pts[i].y} ${xc} ${yc}`;
+    }
+
+    const last = pts[pts.length - 1];
+    d += ` T ${last.x} ${last.y}`;
+
+    pathRef.current?.setAttribute("d", d);
   };
 
   useEffect(() => {
-    reduceMotionRef.current =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let raf: number;
 
-    drawPath();
+    const update = () => {
+      const pts = pointsRef.current;
+      const pointer = pointerRef.current;
 
-    if (reduceMotionRef.current) {
-      return () => {
-        gsap.killTweensOf(curveRef.current);
-      };
-    }
+      pts.forEach((p) => {
+        // distance from cursor
+        const dx = p.x - pointer.x;
+        const dy = p.y - pointer.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
-    controlXToRef.current = gsap.quickTo(curveRef.current, "controlX", {
-      duration: 0.22,
-      ease: "power2.out",
-      onUpdate: drawPath,
-    });
+        if (pointer.active) {
+          // force field (inverse distance)
+          const force = Math.max(0, 1 - dist / 40);
 
-    bendToRef.current = gsap.quickTo(curveRef.current, "bend", {
-      duration: 0.3,
-      ease: "power3.out",
-      onUpdate: drawPath,
-    });
+          // apply vertical pull
+          p.vy += (pointer.y - BASELINE) * force * 0.08;
+        }
 
-    return () => {
-      gsap.killTweensOf(curveRef.current);
+        // spring back to baseline
+        const spring = (BASELINE - p.y) * 0.06;
+
+        p.vy += spring;
+
+        // damping
+        p.vy *= 0.88;
+
+        // apply velocity
+        p.y += p.vy;
+
+        // clamp
+        const maxY = BASELINE + MAX_BEND;
+        const minY = BASELINE - MAX_BEND;
+        p.y = Math.max(minY, Math.min(maxY, p.y));
+      });
+
+      draw();
+      raf = requestAnimationFrame(update);
     };
+
+    update();
+
+    return () => cancelAnimationFrame(raf);
   }, []);
 
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (reduceMotionRef.current || !controlXToRef.current || !bendToRef.current) {
-      return;
-    }
+  const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
 
-    const { currentTarget, clientX, clientY } = event;
-    const rect = currentTarget.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
+    const x = ((e.clientX - rect.left) / rect.width) * WIDTH;
+    const y = ((e.clientY - rect.top) / rect.height) * HEIGHT;
 
-    const normalizedX = ((clientX - rect.left) / rect.width) * VIEWBOX_WIDTH;
-    const normalizedY = (clientY - rect.top) / rect.height;
-    const nextControlX = Math.min(MAX_CONTROL_X, Math.max(MIN_CONTROL_X, normalizedX));
-    const nextBend = (normalizedY - 0.5) * (MAX_BEND * 2);
-
-    controlXToRef.current(nextControlX);
-    bendToRef.current(nextBend);
+    pointerRef.current.x = x;
+    pointerRef.current.y = y;
+    pointerRef.current.active = true;
   };
 
   const handlePointerLeave = () => {
-    gsap.to(curveRef.current, {
-      controlX: DEFAULT_CONTROL_X,
-      bend: 0,
-      duration: 1,
-      ease: "elastic.out(1, 0.2)",
-      overwrite: true,
-      onUpdate: drawPath,
-    });
+    pointerRef.current.active = false;
   };
 
   return (
     <div
-      className={cn("group relative h-10 w-full touch-pan-y select-none", className)}
+      className={cn(
+        "relative h-10 w-full select-none touch-pan-y",
+        className
+      )}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
       <svg
-        className="h-full w-full overflow-visible"
-        viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
+        className="h-full w-full"
+        viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         preserveAspectRatio="none"
-        aria-hidden="true"
       >
+        {/* Base line */}
         <path
-          d={`M 0 ${BASELINE_Y} L ${VIEWBOX_WIDTH} ${BASELINE_Y}`}
-          fill="none"
+          d={`M 0 ${BASELINE} L ${WIDTH} ${BASELINE}`}
+          stroke="var(--border-default)"
           strokeWidth="1"
-          vectorEffect="non-scaling-stroke"
-          style={{ stroke: "var(--border-default)" }}
+          fill="none"
         />
+
+        {/* Spline */}
         <path
           ref={pathRef}
-          fill="none"
+          stroke="var(--brand-primary)"
           strokeWidth="1.5"
+          fill="none"
           strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-          style={{ stroke: "var(--brand-primary)" }}
         />
       </svg>
     </div>
