@@ -45,6 +45,7 @@ export function CTAGroup({
       label: "Contact Me",
       ariaLabel: "Contact me",
       variant: "outline",
+      magnetic: true,
       accentClassName:
         "border-orange-500/30 bg-transparent text-orange-400 hover:border-orange-500/60 hover:bg-orange-500/5",
     },
@@ -53,6 +54,7 @@ export function CTAGroup({
       label: "Resume",
       ariaLabel: "Open resume",
       variant: "outline",
+      
       external: true,
       accentClassName:
         "border-[var(--border-default)] bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
