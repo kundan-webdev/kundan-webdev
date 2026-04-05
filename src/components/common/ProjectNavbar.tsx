@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { RESUME_URL } from "@/data/links";
 
 export default function ProjectNavbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -30,8 +31,7 @@ export default function ProjectNavbar() {
             <span className="text-[var(--brand-primary)]">.</span>kundan
           </Link>
 
-          {/* ❌ NO magnetic here */}
-          <Link href="/resume.pdf" target="_blank">
+          <Link href={RESUME_URL} target="_blank" rel="noopener noreferrer">
             <Button
               variant="outline"
               size="sm"

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { Button } from "@/components/ui/button";
 import { AnimatedThemeToggler } from "@/components/ui/AnimatedThemeToggler";
+import { RESUME_URL } from "@/data/links";
 
 const navLinks = [
   { label: "About", href: "#about", id: "about" },
@@ -80,7 +81,7 @@ export default function Navbar() {
 
           <div className="hidden items-center gap-3 md:flex">
             <AnimatedThemeToggler />
-            <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+            <Link href={RESUME_URL} target="_blank" rel="noopener noreferrer">
               <Button
                 variant="outline"
                 size="sm"
@@ -164,7 +165,7 @@ export default function Navbar() {
               })}
             </nav>
             <Link
-              href="/resume.pdf"
+              href={RESUME_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8"
@@ -180,4 +181,3 @@ export default function Navbar() {
     </>
   );
 }
-

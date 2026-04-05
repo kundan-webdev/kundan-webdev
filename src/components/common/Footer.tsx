@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import { SocialLinks } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
+import { RESUME_URL } from "@/data/links";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -75,7 +76,7 @@ const Footer = () => {
               React · Next.js · TypeScript · Building scalable web apps
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+              <Link href={RESUME_URL} target="_blank" rel="noopener noreferrer">
                 <Button className="min-h-[44px] rounded px-5 py-2.5 text-sm font-semibold">
                   View Resume <ArrowUpRight size={13} />
                 </Button>
@@ -116,4 +117,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { RESUME_URL } from "@/data/links";
 import { cn } from "@/lib/utils";
 
 interface CTAGroupProps {
@@ -27,7 +28,7 @@ interface CTAItem {
 export function CTAGroup({
   projectsHref = "#projects",
   contactHref = "#contact",
-  resumeHref = "/resume.pdf",
+  resumeHref = RESUME_URL,
   className,
 }: CTAGroupProps) {
   const items: CTAItem[] = [
