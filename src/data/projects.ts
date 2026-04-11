@@ -24,7 +24,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: "devxclub-v2",
-    title: "DevXClub v2",
+    title: "DevXClub",
     shortDesc: "AI-powered developer community for 1000+ Indian CS students.",
     longDesc:
       "DevXClub v2 is the flagship product I am building for Indian computer science students who want a practical place to learn, ship, and grow together. It is a full-stack monorepo that combines community, resources, product thinking, and an AI-assisted roadmap into one experience.\n\nI led the frontend architecture, product direction, and the overall system design for the platform. The result is a production-ready foundation with authentication, profile flows, dashboard experiences, upload pipelines, and a roadmap for AI code review and jobs.",
