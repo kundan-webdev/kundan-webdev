@@ -1,7 +1,7 @@
 # Hey, I'm Kundan Kumar 👋
 
-**Full-Stack Developer · DevXClub Founder · UI/UX Designer**  
-Building real products from Varanasi, India. Final-year BCA student.
+**Full-Stack Developer · UI/UX Designer**  
+Building real products. Final-year BCA student.
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-kundan--webdev.vercel.app-ea580c?style=flat-square)](https://kundan-webdev.vercel.app)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077b5?style=flat-square&logo=linkedin)](https://linkedin.com/in/kundan-webdev)
@@ -12,7 +12,7 @@ Building real products from Varanasi, India. Final-year BCA student.
 
 ## 🏗️ Currently Building
 
-**[DevXClub v2](https://devxclub.com)** — A full-stack developer community platform. Turborepo monorepo · Next.js 15 · Express.js · MongoDB · Cloudinary. JWT auth, resource uploads, dashboard, and a studio arm at [studio.devxclub.com](https://studio.devxclub.com).
+**[DevXClub v3](https://devxclub.com)** — A full-stack developer community platform. Turborepo monorepo · Next.js 15 · Express.js · MongoDB · Cloudinary. JWT auth, resource uploads, dashboard, and a studio arm at [studio.devxclub.com](https://studio.devxclub.com).
 
 **[Solvimate](https://solvimate.com)** — Frontend Developer Intern. Leading React development, integrating Express.js REST APIs.
 
