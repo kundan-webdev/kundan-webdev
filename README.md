@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-<a href="https://kundan-webdev.vercel.app"><img src="https://img.shields.io/badge/Portfolio-ff0000?style=flat-square" /></a>
+<a href="https://kundan-webdev.vercel.app"><img src="https://img.shields.io/badge/Portfolio-996515?style=flat-square" /></a>
 <a href="https://linkedin.com/in/kundan-webdev"><img src="https://img.shields.io/badge/LinkedIn-A6193E?style=flat-square&logo=linkedin&logoColor=white" /></a>
 <a href="mailto:kundan.webdev@gmail.com"><img src="https://img.shields.io/badge/Email-E83867?style=flat-square&logo=gmail&logoColor=white" /></a>
 <a href="https://instagram.com/kundan_webdev"><img src="https://img.shields.io/badge/Instagram-5A5FF2?style=flat-square&logo=instagram&logoColor=white" /></a>
