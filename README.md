@@ -35,6 +35,3 @@
 <p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=871530&height=2&width=800" /></p>
 
 <p align="center">
-<img src="https://github-readme-stats.vercel.app/api?username=kundan-webdev&show_icons=true&theme=dark&hide_border=true&bg_color=080808&title_color=E83867&icon_color=EFE510&hide=stars" height="150"/>
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kundan-webdev&layout=compact&theme=dark&hide_border=true&bg_color=080808&title_color=E83867" height="150"/>
-</p>
