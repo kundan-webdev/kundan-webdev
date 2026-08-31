@@ -14,7 +14,7 @@
 <p align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=871530&height=2&width=800" /></p>
 
 <p align="center">
-<b>Founder</b> — <a href="https://devxclub.com">DevXClub</a> &nbsp;|&nbsp;
+<b>Builder of</b> — <a href="https://devxclub.com">DevXClub</a> &nbsp;|&nbsp;
 <b>Currently</b> — Full-Stack (MERN) Developer @ <a href="https://monitize.co">Monitize.co</a>
 </p>
 
